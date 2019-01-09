@@ -12,3 +12,5 @@ Flask-WTF==0.14.2
 psycopg2==2.7.4
 pandas
 altair
+flask-mongoengine
+Flask-PyMongo

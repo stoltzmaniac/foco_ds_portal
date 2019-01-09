@@ -14,6 +14,10 @@ class BaseConfig(object):
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False
+    MONGO_URI = os.getenv("MONGO_URI")
+    MONGO_DB = os.getenv("MONGODB_DB")
+    MONGO_HOST = os.getenv("MONGODB_HOST")
+    MONGO_PORT = os.getenv("MONGODB_PORT")
 
 
 class DevelopmentConfig(BaseConfig):
