@@ -12,10 +12,10 @@ services:
     ports:
       - 5002:5000
     environment:
-      - APP_NAME=FoCo DS Portal
-      - FLASK_DEBUG=1
+      - APP_NAME=${APP_NAME}
+      - FLASK_DEBUG=${FLASK_DEBUG}
       - PYTHONUNBUFFERED=0
-      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - APP_SETTINGS=${APP_SETTINGS}
       - DATABASE_URL=postgres://postgres:postgres@web-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/users_test
       - SECRET_KEY=change_me_in_prod
