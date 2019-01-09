@@ -13,7 +13,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 script:
-    - docker-compose up --build
+    - docker-compose up -d --build
     - docker-compose run web python manage.py create-db
     - docker-compose run web python manage.py db init
     - docker-compose run web python manage.py db migrate
