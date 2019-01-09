@@ -1,3 +1,5 @@
+![](https://travis-ci.com/stoltzmaniac/foco_ds_portal.svg?branch=master)
+
 # FoCo DS Portal
 
 ## Quick Start
