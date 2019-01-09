@@ -11,3 +11,4 @@ Flask-Testing==0.7.1
 Flask-WTF==0.14.2
 psycopg2==2.7.4
 pandas
+altair

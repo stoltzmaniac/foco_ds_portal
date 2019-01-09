@@ -17,6 +17,22 @@
           <a class="nav-link" href="{{ url_for('user.members') }}">Members</a>
         </li>
         {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <div class="dropdown show">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Data Science
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url_for('stoltzmaniac.home') }}">Stoltzmaniac</a>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+
       </ul>
       <!-- Login/Logout -->
       <ul class="navbar-nav ml-auto">
