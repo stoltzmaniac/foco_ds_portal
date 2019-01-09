@@ -14,3 +14,5 @@ pandas
 altair
 flask-mongoengine
 Flask-PyMongo
+twitter
+bson
