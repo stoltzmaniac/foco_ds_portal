@@ -48,16 +48,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - 27017:27017
-
-  nginx:
-    container_name: ./project/nginx
-    restart: always
-    build: ./nginx/
-    ports:
-      - "80:80"
-    volumes:
-      - /www/static
-    volumes_from:
-      - web
-    links:
-      - web:web
