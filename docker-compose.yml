@@ -10,7 +10,7 @@ services:
     volumes:
       - '.:/usr/src/app'
     ports:
-      - 5002:5000
+      - "8000"
     environment:
       - APP_NAME=${APP_NAME}
       - FLASK_DEBUG=${FLASK_DEBUG}
@@ -36,7 +36,7 @@ services:
       context: ./project/server/db
       dockerfile: Dockerfile
     ports:
-      - 5435:5432
+      - "5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -48,3 +48,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - 27017:27017
+
+  nginx:
+    container_name: ./project/nginx
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web
