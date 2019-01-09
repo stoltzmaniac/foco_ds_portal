@@ -18,6 +18,10 @@ class BaseConfig(object):
     MONGO_DB = os.getenv("MONGODB_DB")
     MONGO_HOST = os.getenv("MONGODB_HOST")
     MONGO_PORT = os.getenv("MONGODB_PORT")
+    TWTR_CONSUMER_KEY = os.getenv("TWTR_CONSUMER_KEY")
+    TWTR_CONSUMER_SECRET = os.getenv("TWTR_CONSUMER_SECRET")
+    TWTR_TOKEN_KEY = os.getenv("TWTR_TOKEN_KEY")
+    TWTR_TOKEN_SECRET = os.getenv("TWTR_TOKEN_SECRET")
 
 
 class DevelopmentConfig(BaseConfig):

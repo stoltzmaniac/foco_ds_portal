@@ -16,3 +16,4 @@ altair
 flask-mongoengine
 Flask-PyMongo
 python-twitter
+textblob

@@ -37,47 +37,8 @@ def twitter():
     data = tweets.find({"one_hundred_id": user_id})
     output = [i for i in data]
 
-    # All for c3.js
-    chart_data = []
-    for i in output:
-        chart_data.append(
-            {
-                "timestamp": i["timestamp"],
-                "text": i["text"],
-                "screen_name": i["user"]["screen_name"],
-            }
-        )
-
-    chart_df = pd.DataFrame(chart_data)
-    chart_df["timestamp"] = pd.to_datetime(chart_df["timestamp"])
-    chart_df["Date"] = chart_df["timestamp"].apply(
-        lambda dt: datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
-    )
-    chart_df["Date"] = chart_df["Date"].dt.hour
-    chart_df = chart_df.groupby(["Date"]).count()
-    chart_df = chart_df.reset_index()
-    chart_df = chart_df.sort_values("Date", ascending=True)
-    chart_df["Date"] = chart_df["Date"].apply(lambda x: str(x))
-    chart_df["Tweets"] = chart_df["text"]
-    chart_df = chart_df[["Date", "Tweets"]]
-    chart_data = chart_df.to_dict(orient="records")
-    chart_dates = ["Date"]
-    chart_tweets = ["Tweets"]
-    for i in chart_data:
-        chart_dates.append(i["Date"])
-        chart_tweets.append(i["Tweets"])
-    print(chart_dates)
-    print(chart_tweets)
-    # done with c3.js
-
     if request.method == "GET":
-        return render_template(
-            "twitter/index.html",
-            myform=form,
-            output=output,
-            chart_dates=chart_dates,
-            chart_tweets=chart_tweets,
-        )
+        return render_template("twitter/index.html", myform=form, output=output)
 
     elif request.method == "POST" and form.validate_on_submit():
         data = twitter_search(request)

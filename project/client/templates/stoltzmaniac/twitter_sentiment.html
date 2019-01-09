@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="container">
-    <h1 class="mt-5">Twitter</h1>
+    <h1 class="mt-5">Stoltzmaniac - Twitter Sentiment Analysis</h1>
 
     <form id="randomDataForm" class="form" method="POST" action="" role="form">
         {{ myform.csrf_token }}
@@ -19,11 +19,16 @@
         <p><input class="btn btn-primary" type="submit" value="Submit"></p>
     </form>
 
-    {% if output %}
+    {% if chart_data %}
+        <strong>Sentiment of tweets:</strong>
 
-        <ul id="tweets">
-            {% for o in output %}
-                <li>{{ o['text'] }}</li>
+        {{ chart_data }}
+
+        <br/>
+
+        <ul>
+            {% for tweet in tweets %}
+                <li>{{ tweet }}</li>
             {% endfor %}
         </ul>
 
