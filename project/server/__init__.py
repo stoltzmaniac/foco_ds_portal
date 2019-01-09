@@ -54,10 +54,12 @@ def create_app(script_info=None):
     from project.server.user.views import user_blueprint
     from project.server.main.views import main_blueprint
     from project.server.stoltzmaniac.views import stoltzmaniac_blueprint
+    from project.server.twitter.views import twitter_blueprint
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(stoltzmaniac_blueprint)
+    app.register_blueprint(twitter_blueprint)
 
     # flask login
     from project.server.models import User

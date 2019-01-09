@@ -1,4 +1,4 @@
-from project.database import medb
+from project.server import medb
 
 
 class TwitterRequest(medb.Document):

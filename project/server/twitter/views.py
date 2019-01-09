@@ -19,15 +19,15 @@ from flask_login import login_required
 
 from project.server import mdb
 
-from onehundreddaysofcode.utils import flash_errors, twtr
-from onehundreddaysofcode.twitter.mongo_forms import TwitterForm
-from onehundreddaysofcode.twitter.utils import twitter_search
+from project.server.utils import flash_errors, twtr
+from project.server.twitter.mongo_forms import TwitterForm
+from project.server.twitter.utils import twitter_search
 
 
-blueprint = Blueprint("twitter", __name__, url_prefix="/twitter")
+twitter_blueprint = Blueprint("twitter", __name__, url_prefix="/twitter")
 
 
-@blueprint.route("/", methods=["GET", "POST"])
+@twitter_blueprint.route("/", methods=["GET", "POST"])
 @login_required
 def twitter():
     """Adding Twitter data to Mongo database via form"""

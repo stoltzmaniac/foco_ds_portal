@@ -3,7 +3,7 @@ from urllib.parse import quote_plus
 
 from flask import jsonify
 
-from onehundreddaysofcode.utils import twtr
+from project.server.utils import twtr
 
 
 def twitter_search(request) -> list:
