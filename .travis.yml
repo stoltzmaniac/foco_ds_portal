@@ -1,26 +1,23 @@
 sudo: required
-
-language: python
-python:
-  - "3.6"
-
 services:
-    - docker
-
+  - docker
 env:
   - DOCKER_COMPOSE_VERSION=1.22.0
-
 before_install:
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-
 script:
-  - docker-compose build
-  - docker-compose up -d
+  - docker-compose up -d --build
   - docker-compose run web python manage.py create-db
   - docker-compose run web python manage.py db init
   - docker-compose run web python manage.py db migrate
   - docker-compose run web python manage.py create-admin
   - docker-compose run web python manage.py create-data
+deploy:
+  provider: heroku
+  api_key:
+    secure: qrwVsNdoa1Gv/jwkocrxM3g8FHoI8ceiOY5cpDMuMd1dD2Xx5Au8Y4VAdc7c6qKRjFEek7Dyqt5ePSUHuY8UfonctRDYvDQsKrlNMGgkY3KtjPMAfxu5KC5Q8mph12elQenb5o7O+Es3biBwFVTjGvmkjLt3op+LNxqjg+YNLJjHzU9gJK7EfIIRDPCaywjTDLAqfPOkNLQuKN58/GjWtPwy7n2P67vwPaY1P0pFe3UMFT6hgIpBum8KrWVjFPic7L+vTQ26uXTIK1nBRBFXxta4yhv5LvgIJ8SMXHlbx/iRjuv8+UqMvXw/IOhkxX+ivMC38K5zXALwA9iJMiyXPyrWyexp97pOZJhB8jIxWRz9atWoA8GrkskqoS0joi2S/fqZwgnxnTn1opkyfVN9VuWS7bt9LIVHBU9NITqgWUOHbosnpsTa1WDyY0phUlTspvWNrU6/CqM3IF+7nLw+oQ/MRiQdM2hHMDGYYU/RHZygHETo9yXPnC6WvkYi48gw58lRYp9YGZseEIH+9BdsJMZ8djHF6VYVsLtvm/netNzF6gyvG9EZeYoUp++3vD7FSf4IHfCSraJV6Fp0RZgk6FQDvoYp3sgYRvfWIxK0qVByfmdKnsnNc+S+NFqala2PdLuKlezpExJlJmQibEK5axORbFFcF4EvcX67OmXmYRU=
+
