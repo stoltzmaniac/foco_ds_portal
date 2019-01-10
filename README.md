@@ -17,20 +17,16 @@ Clone the repository
 $ git clone https://github.com/stoltzmaniac/foco_ds_portal.git
 ```
 
-Update the environment variables in *docker-compose.yml*, and then build the images and spin up the containers:
+Update the environment variables in *docker-compose.yml* by:
+  - Rename `.bash_profile.example` to `.bash_profile`
+  - Fill in the `TWTR` variables with your own data
+  - This will be ignored via `.gitignore`
+
+Source variables then build the images and spin up the containers:
 
 ```sh
-$ docker-compose up -d --build
-```
-
-Create the database:
--
-```sh
-$ docker-compose run web python manage.py create-db
-$ docker-compose run web python manage.py db init
-$ docker-compose run web python manage.py db migrate
-$ docker-compose run web python manage.py create-admin
-$ docker-compose run web python manage.py create-data
+$ source .bash_profile
+$ sh initial_deploy.sh
 ```
 
 Access the application at the address [http://localhost:5002/](http://localhost:5002/)
