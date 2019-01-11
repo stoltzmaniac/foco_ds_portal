@@ -10,6 +10,7 @@ Flask-SQLAlchemy==2.3.2
 Flask-Testing==0.7.1
 Flask-WTF==0.14.2
 psycopg2==2.7.4
+black
 pandas
 pymongo
 altair
