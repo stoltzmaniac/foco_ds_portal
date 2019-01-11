@@ -35,15 +35,15 @@ def altair_example():
 def twitter_sentiment():
     form = TwitterForm(request.form)
     if request.method == "GET":
-        return render_template(
-            "stoltzmaniac/twitter_sentiment.html", myform=form
-        )
+        return render_template("stoltzmaniac/twitter_sentiment.html", myform=form)
 
     elif request.method == "POST" and form.validate_on_submit():
         chart_data = []
         data = twitter_search(request)
         sentiment = analyze_tweet_sentiment(data)
         return render_template(
-            "stoltzmaniac/twitter_sentiment.html", myform=form,
-            chart_data=sentiment[1], tweets=sentiment[0]
+            "stoltzmaniac/twitter_sentiment.html",
+            myform=form,
+            chart_data=sentiment[1],
+            tweets=sentiment[0],
         )

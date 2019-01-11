@@ -16,10 +16,7 @@ def plot_altair() -> alt.Chart:
     data = download_csv()
     base = alt.Chart(data)
     # Build chart
-    bar = base.mark_bar().encode(
-        x=alt.X('latitude', bin=True, axis=None),
-        y='count()'
-    )
+    bar = base.mark_bar().encode(x=alt.X("latitude", bin=True, axis=None), y="count()")
     return bar
 
 
@@ -41,13 +38,13 @@ def analyze_tweet_sentiment(tweet_list: list) -> list:
         twt = {}
         analysis = TextBlob(clean_tweet(tweet["text"]))
         if analysis.sentiment.polarity > 0:
-            twt['positive'] = tweet['text']
+            twt["positive"] = tweet["text"]
             positive += 1
         elif analysis.sentiment.polarity == 0:
-            twt['neutral'] = tweet['text']
+            twt["neutral"] = tweet["text"]
             neutral += 1
         else:
-            twt['negative'] = tweet['text']
+            twt["negative"] = tweet["text"]
             negative += 1
         tweet_sentiment.append(twt)
     total_sentiment = {"positive": positive, "neutral": neutral, "negative": negative}

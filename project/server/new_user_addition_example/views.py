@@ -10,7 +10,9 @@ from project.server.twitter.utils import twitter_search
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment
 
 
-new_user_addition_example_blueprint = Blueprint("new_user_addition_example", __name__, url_prefix="/new_user_addition_example")
+new_user_addition_example_blueprint = Blueprint(
+    "new_user_addition_example", __name__, url_prefix="/new_user_addition_example"
+)
 
 
 @new_user_addition_example_blueprint.route("/", methods=["GET"])
