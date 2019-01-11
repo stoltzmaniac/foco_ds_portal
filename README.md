@@ -18,14 +18,14 @@ $ git clone https://github.com/stoltzmaniac/foco_ds_portal.git
 ```
 
 Update the environment variables in *docker-compose.yml* by:
-  - Rename `.bash_profile.example` to `.bash_profile`
+  - Rename `.env.example` to `.env`
+  - Fill in the variables (a few are prepopulated for debug mode)
   - Fill in the `TWTR` variables with your own data
   - This will be ignored via `.gitignore`
 
-Source variables then build the images and spin up the containers:
+Build images and spin up containers!
 
 ```sh
-$ source .bash_profile
 $ sh initial_deploy.sh
 ```
 
