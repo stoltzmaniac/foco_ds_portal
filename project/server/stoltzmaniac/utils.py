@@ -1,9 +1,17 @@
 import re
+import requests as requests_lib
+from io import BytesIO
 
 from textblob import TextBlob
 
+import numpy as np
 import pandas as pd
 import altair as alt
+import matplotlib.pyplot as plt
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS
+from IPython.display import Image as im
+
 
 
 def download_csv() -> pd.DataFrame:
@@ -49,3 +57,35 @@ def analyze_tweet_sentiment(tweet_list: list) -> list:
         tweet_sentiment.append(twt)
     total_sentiment = {"positive": positive, "neutral": neutral, "negative": negative}
     return [tweet_sentiment, total_sentiment]
+
+
+def clean_list_of_text(wordcloud_data):
+    raw_string = ''.join(wordcloud_data)
+    no_links = re.sub(r'http\S+', '', raw_string)
+    no_unicode = re.sub(r"\\[a-z][a-z]?[0-9]+", '', no_links)
+    no_special_characters = re.sub('[^A-Za-z ]+', '', no_unicode)
+    words = no_special_characters.split(" ")
+    words = [w for w in words if len(w) > 2]  # ignore a, an, be, ...
+    words = [w.lower() for w in words]
+    words = [w for w in words if w not in STOPWORDS]
+    return words
+
+
+def generate_wordcloud(wordcloud_data, image_url) -> plt:
+    words = clean_list_of_text(wordcloud_data)
+    img_response = requests_lib.get(image_url)
+    img = Image.open(BytesIO(img_response.content))
+    mask = np.array(img)
+    wc = WordCloud(background_color="white", max_words=2000, mask=mask)
+    clean_string = ','.join(words)
+    wc.generate(clean_string)
+    f = plt.figure(figsize=(50, 50))
+    f.add_subplot(1, 2, 1)
+    plt.imshow(mask, cmap=plt.cm.gray, interpolation='bilinear')
+    plt.title('Original Stencil', size=40)
+    plt.axis("off")
+    f.add_subplot(1, 2, 2)
+    plt.imshow(wc, interpolation='bilinear')
+    plt.title('Twitter Generated Cloud', size=40)
+    plt.axis("off")
+    return plt

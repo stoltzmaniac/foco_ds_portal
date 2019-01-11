@@ -21,7 +21,7 @@ from project.server import mdb
 
 from project.server.utils import flash_errors, twtr
 from project.server.twitter.mongo_forms import TwitterForm
-from project.server.twitter.utils import twitter_search
+from project.server.twitter.utils import twitter_search, twitter_timeline
 
 
 twitter_blueprint = Blueprint("twitter", __name__, url_prefix="/twitter")

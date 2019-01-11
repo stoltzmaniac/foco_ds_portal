@@ -21,3 +21,10 @@ def twitter_search(request) -> list:
         )
         data.append(d)
     return data
+
+
+def twitter_timeline(request) -> list:
+    form_data = request.form
+    results = twtr.GetUserTimeline(screen_name=form_data['username'], count=1000)
+    data = [i.text for i in results]
+    return data
