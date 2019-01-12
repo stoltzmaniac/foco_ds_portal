@@ -14,3 +14,6 @@ script:
   - docker-compose run web python manage.py create-admin
   - docker-compose run web python manage.py create-data
   - docker-compose run web python manage.py cov
+
+after_success:
+  - coveralls
