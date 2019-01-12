@@ -20,12 +20,10 @@
     </form>
 
     {% if wordcloud %}
-        <strong>Tweet Timeline</strong>
 
-       <img src="data:image/png;base64, {{ wordcloud }} "/>
-
-        <br/>
-
+        <div class="container">
+            <img src="data:image/png;base64, {{ wordcloud }} "/>
+        </div>
 
     {% endif %}
 
