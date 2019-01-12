@@ -83,7 +83,6 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     f = plt.figure(figsize=(25, 25))
     f.add_subplot(1, 2, 1)
     plt.imshow(wc, interpolation='bilinear')
-    plt.title('Twitter Generated Cloud', size=40)
     plt.axis("off")
     tmpfile = BytesIO()
     plt.savefig(tmpfile, format='png', bbox_inches="tight", pad_inches=0)
