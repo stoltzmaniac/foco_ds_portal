@@ -6,9 +6,6 @@ env:
 before_install:
   - sudo apt-get update
 script:
-  - cd /var/www
-  - mkdir webapp
-  - cd webapp
   - docker-compose up -d --build
   - docker-compose run web python manage.py create-db
   - docker-compose run web python manage.py db migrate
