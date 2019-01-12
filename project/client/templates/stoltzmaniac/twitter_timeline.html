@@ -19,10 +19,10 @@
         <p><input class="btn btn-primary" type="submit" value="Submit"></p>
     </form>
 
-    {% if wordcloud_data %}
+    {% if wordcloud %}
         <strong>Tweet Timeline</strong>
 
-        {{ wordcloud }}
+       <img src="data:image/png;base64, {{ wordcloud }} "/>
 
         <br/>
 

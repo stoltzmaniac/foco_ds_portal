@@ -64,5 +64,5 @@ def tweet_timeline():
         return render_template(
             "stoltzmaniac/twitter_timeline.html",
             myform=form,
-            wordcloud=wordcloud,
+            wordcloud=wordcloud.decode('utf-8'),
         )

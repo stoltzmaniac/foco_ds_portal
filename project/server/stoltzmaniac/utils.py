@@ -1,4 +1,5 @@
 import re
+import base64
 import requests as requests_lib
 from io import BytesIO
 
@@ -88,4 +89,7 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     plt.imshow(wc, interpolation='bilinear')
     plt.title('Twitter Generated Cloud', size=40)
     plt.axis("off")
-    return plt
+    tmpfile = BytesIO()
+    plt.savefig(tmpfile, format='png')
+    encoded = base64.b64encode(tmpfile.getvalue())
+    return encoded
