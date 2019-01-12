@@ -86,6 +86,6 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     plt.title('Twitter Generated Cloud', size=40)
     plt.axis("off")
     tmpfile = BytesIO()
-    plt.savefig(tmpfile, format='png')
+    plt.savefig(tmpfile, format='png', bbox_inches="tight", pad_inches=0)
     encoded = base64.b64encode(tmpfile.getvalue())
     return encoded
