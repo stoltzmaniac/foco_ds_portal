@@ -37,15 +37,6 @@
         <p><input class="btn btn-primary" type="submit" value="Submit"></p>
     </form>
 
-    {% if not wordcloud %}
-        Sample image links (solid black with white backgrounds work best)
-        <ul>
-            <li><a href="https://i.postimg.cc/mrQxTBz6/download.png">Punisher Logo</a> - https://i.postimg.cc/mrQxTBz6/download.png</li>
-            <li><a href="https://i.postimg.cc/VkPvgL8K/ele.png">Republican Elephant</a> - https://i.postimg.cc/VkPvgL8K/ele.png</li>
-            <li><a href="https://i.postimg.cc/GmvWPbLJ/donk.jpg">Democrat Donkey</a> - https://i.postimg.cc/GmvWPbLJ/donk.jpg</li>
-        </ul>
-    {% endif %}
-
     {% if wordcloud %}
 
         <div class="imgbox">
@@ -54,6 +45,11 @@
 
     {% endif %}
 
+    Sample image links (solid black with white backgrounds work best)
+    <ul>
+        <li><a href="https://i.postimg.cc/VkPvgL8K/ele.png">Republican Elephant</a> - https://i.postimg.cc/VkPvgL8K/ele.png</li>
+        <li><a href="https://i.postimg.cc/GmvWPbLJ/donk.jpg">Democrat Donkey</a> - https://i.postimg.cc/GmvWPbLJ/donk.jpg</li>
+    </ul>
 
 </div>
 {% endblock %}
