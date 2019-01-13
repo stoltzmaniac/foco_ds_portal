@@ -1,4 +1,5 @@
 import re
+from collections import namedtuple
 import base64
 import requests as requests_lib
 from io import BytesIO
@@ -88,3 +89,11 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     plt.savefig(tmpfile, format='png', bbox_inches="tight", pad_inches=0)
     encoded = base64.b64encode(tmpfile.getvalue())
     return encoded
+
+
+def get_congressional_list() -> namedtuple:
+    # data from: https://gwu-libraries.github.io/sfm-ui/posts/2017-05-23-congress-seed-list
+    house_ = pd.read_csv("https://s3.amazonaws.com/foco-ds-portal-files/115th-Congress-House-seeds.csv", header=None)
+    senate_ = pd.read_csv("https://s3.amazonaws.com/foco-ds-portal-files/115th-Congress-Senate-seeds.csv", header=None)
+    Congress = namedtuple('Congress', 'house senate')
+    return Congress(house=house_[0].tolist(), senate=senate_[0].tolist())

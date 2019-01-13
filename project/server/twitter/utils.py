@@ -1,4 +1,5 @@
 import time
+from collections import namedtuple
 from urllib.parse import quote_plus
 
 from flask import jsonify
@@ -28,3 +29,16 @@ def twitter_timeline(request) -> list:
     results = twtr.GetUserTimeline(screen_name=form_data['username'], count=1000)
     data = [i.text for i in results]
     return data
+
+
+def twitter_congress():
+    r_house = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'house_of_representatives', 'party': 'republican'} for i in twtr.GetListMembers(slug='house-republicans', owner_screen_name='HouseGOP')]
+    d_house = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'house_of_representatives', 'party': 'democrat'} for i in twtr.GetListMembers(slug='house-democrats', owner_screen_name='HouseDemocrats')]
+    r_senate = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'senate', 'party': 'republican'} for i in twtr.GetListMembers(slug='senaterepublicans', owner_screen_name='SenateGOP')]
+    d_senate = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'senate', 'party': 'democrat'} for i in twtr.GetListMembers(slug='senatedemocrats', owner_screen_name='SenateDems')]
+    congress = r_house + d_house + r_senate + d_senate
+    return congress
+
+
+
+

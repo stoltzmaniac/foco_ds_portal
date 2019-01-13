@@ -7,7 +7,7 @@ from flask_login import login_required
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
 from project.server.twitter.utils import twitter_search, twitter_timeline
-from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
+from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud, get_congressional_list
 
 
 stoltzmaniac_blueprint = Blueprint("stoltzmaniac", __name__, url_prefix="/stoltzmaniac")
@@ -66,3 +66,13 @@ def tweet_timeline():
             myform=form,
             wordcloud=wordcloud.decode('utf-8'),
         )
+
+
+@stoltzmaniac_blueprint.route('/congress', methods=['GET'])
+def congressional_tweets():
+    data = get_congressional_list()
+    house = data.house
+    senate = data.senate
+    print(house)
+    print(senate)
+    return jsonify({'hi': 'there'})
