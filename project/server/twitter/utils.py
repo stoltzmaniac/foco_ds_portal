@@ -31,11 +31,11 @@ def twitter_timeline(request) -> list:
     return data
 
 
-def twitter_congress():
-    r_house = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'house_of_representatives', 'party': 'republican'} for i in twtr.GetListMembers(slug='house-republicans', owner_screen_name='HouseGOP')]
-    d_house = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'house_of_representatives', 'party': 'democrat'} for i in twtr.GetListMembers(slug='house-democrats', owner_screen_name='HouseDemocrats')]
-    r_senate = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'senate', 'party': 'republican'} for i in twtr.GetListMembers(slug='senaterepublicans', owner_screen_name='SenateGOP')]
-    d_senate = [{'screen_name': i.screen_name, 'picture': i.profile_image_url, 'chamber': 'senate', 'party': 'democrat'} for i in twtr.GetListMembers(slug='senatedemocrats', owner_screen_name='SenateDems')]
+def twitter_congressional_list():
+    r_house = [dict(i.AsDict(), chamber='house_of_representatives', party='republican') for i in twtr.GetListMembers(slug='house-republicans', owner_screen_name='HouseGOP')]
+    d_house = [dict(i.AsDict(), chamber='house_of_representatives', party='democrat') for i in twtr.GetListMembers(slug='house-democrats', owner_screen_name='HouseDemocrats')]
+    r_senate = [dict(i.AsDict(), chamber='senate', party='republican') for i in twtr.GetListMembers(slug='senaterepublicans', owner_screen_name='SenateGOP')]
+    d_senate = [dict(i.AsDict(), chamber='senate', party='democrat') for i in twtr.GetListMembers(slug='senatedemocrats', owner_screen_name='SenateDems')]
     congress = r_house + d_house + r_senate + d_senate
     return congress
 

@@ -1,13 +1,12 @@
 # project/server/stoltzmaniac/views.py
-
-
 from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify
 from flask_login import login_required
+import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import twitter_search, twitter_timeline
-from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud, get_congressional_list
+from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list
+from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
 stoltzmaniac_blueprint = Blueprint("stoltzmaniac", __name__, url_prefix="/stoltzmaniac")
@@ -70,9 +69,10 @@ def tweet_timeline():
 
 @stoltzmaniac_blueprint.route('/congress', methods=['GET'])
 def congressional_tweets():
-    data = get_congressional_list()
-    house = data.house
-    senate = data.senate
-    print(house)
-    print(senate)
-    return jsonify({'hi': 'there'})
+    data = twitter_congressional_list()
+    df = pd.DataFrame(data)
+    s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
+    s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
+    s_hor = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
+    d_hor = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
+    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, s_hor=s_hor, d_hor=d_hor)

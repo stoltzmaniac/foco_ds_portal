@@ -1,0 +1,17 @@
+
+{% extends "_base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="mt-5">Stoltzmaniac - Congress</h1>
+            <strong>Dem Senate</strong>
+            <div>
+                {% for sd in s_dem %}
+                    <img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt="">  -  {{ sd['screen_name'] | safe }}
+                    <br>
+                {% endfor %}
+            </div>
+    </div>
+
+{% endblock %}
