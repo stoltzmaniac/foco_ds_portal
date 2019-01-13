@@ -12,6 +12,9 @@ Flask-WTF==0.14.2
 psycopg2==2.7.4
 
 # Extras
+pytest
+WebTest
+factory-boy
 python-coveralls
 black
 pandas
