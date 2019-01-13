@@ -15,6 +15,7 @@
     {{ wtf.form_errors(form, hiddens="only") }}
 
     <div class="col-lg-4 col-sm-4">
+      {{ wtf.form_field(form.username) }}
       {{ wtf.form_field(form.email) }}
       {{ wtf.form_field(form.password) }}
       {{ wtf.form_field(form.confirm) }}
