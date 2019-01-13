@@ -31,6 +31,12 @@ def twitter_timeline(request) -> list:
     return data
 
 
+def twitter_timeline2(screen_name) -> list:
+    results = twtr.GetUserTimeline(screen_name=screen_name, count=1000)
+    data = [i.text for i in results]
+    return data
+
+
 def twitter_congressional_list():
     r_house = [dict(i.AsDict(), chamber='house_of_representatives', party='republican') for i in twtr.GetListMembers(slug='house-republicans', owner_screen_name='HouseGOP')]
     d_house = [dict(i.AsDict(), chamber='house_of_representatives', party='democrat') for i in twtr.GetListMembers(slug='house-democrats', owner_screen_name='HouseDemocrats')]

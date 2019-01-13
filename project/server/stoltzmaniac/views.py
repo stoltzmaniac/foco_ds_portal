@@ -5,7 +5,7 @@ import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list
+from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, twitter_timeline2
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
@@ -76,3 +76,11 @@ def congressional_tweets():
     s_hor = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
     d_hor = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
     return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, s_hor=s_hor, d_hor=d_hor)
+
+
+# TODO: Clean up how to pass request only once
+@stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<img_url>", methods=["POST"])
+def wc2(screen_name, img_url):
+    wordcloud_data = twitter_timeline2(screen_name)
+    wordcloud = generate_wordcloud(wordcloud_data, img_url)
+    return jsonify(wordcloud=wordcloud.decode('utf-8'))

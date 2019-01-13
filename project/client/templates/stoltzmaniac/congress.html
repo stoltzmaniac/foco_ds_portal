@@ -1,14 +1,42 @@
 
 {% extends "_base.html" %}
 
+{% block css %}
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .imgbox {
+            display: grid;
+            height: 100%;
+        }
+        .center-fit {
+            max-width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 
     <div class="container">
         <h1 class="mt-5">Stoltzmaniac - Congress</h1>
+
+            {% if wordcloud %}
+
+                <div class="imgbox">
+                    <img class="center-fit" src="data:image/png;base64, {{ wordcloud }} "/>
+                </div>
+
+            {% endif %}
+
+
             <strong>Dem Senate</strong>
             <div>
                 {% for sd in s_dem %}
-                    <img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt="">  -  {{ sd['screen_name'] | safe }}
+                    <img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt="">  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
                     <br>
                 {% endfor %}
             </div>
