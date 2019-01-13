@@ -16,8 +16,8 @@ services:
       - FLASK_DEBUG=${FLASK_DEBUG}
       - PYTHONUNBUFFERED=0
       - APP_SETTINGS=${APP_SETTINGS}
-      - DATABASE_URL=postgres://postgres:postgres@web-db:5432/users_dev
-      - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/users_test
+      - DATABASE_URL=postgresql://postgres:postgres@web-db:5432/users_dev
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@web-db:5432/users_test
       - SECRET_KEY=change_me_in_prod
       - MONGO_URI=mongodb://web-mongo:27017/onehundreddaysofcode
       - MONGODB_DB=onehundreddaysofcode

@@ -4,7 +4,7 @@ import datetime as dt
 
 import pytest
 
-from project.server.models import User
+from project.server.models import User, Role
 from .factories import UserFactory
 
 
@@ -61,3 +61,12 @@ class TestUser:
                                password='foobarbaz123')
             assert user.check_password('foobarbaz123') is True
             assert user.check_password('barfoobaz') is False
+
+        def test_roles(self):
+            """Add a role to a user."""
+            role = Role(name='admin')
+            role.save()
+            user = UserFactory()
+            user.roles.append(role)
+            user.save()
+            assert role in user.roles
