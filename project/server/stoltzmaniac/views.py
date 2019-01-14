@@ -5,7 +5,7 @@ import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import TwitterData, twitter_search, twitter_timeline, twitter_congressional_list, twitter_timeline2
+from project.server.twitter.utils import TwitterData, twitter_search, twitter_timeline, twitter_congressional_list, twitter_congressional_list2, twitter_timeline2
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
@@ -69,7 +69,9 @@ def tweet_timeline():
 
 @stoltzmaniac_blueprint.route('/congress', methods=['GET'])
 def congressional_tweets():
-    data = twitter_congressional_list()
+    # data = twitter_congressional_list()
+    data = twitter_congressional_list2()
+    print(data)
     df = pd.DataFrame(data)
     s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
     s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')

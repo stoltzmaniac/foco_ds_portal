@@ -84,7 +84,7 @@ def twitter_congressional_list():
     return congress
 
 
-def hello_twitter():
+def twitter_congressional_list2():
     chamber_data = [{'chamber': 'house_of_representatives', 'party': 'republican', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
                     {'chamber': 'house_of_representatives', 'party': 'democrat', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
                     {'chamber': 'senate', 'party': 'republican', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
@@ -93,5 +93,5 @@ def hello_twitter():
     for i in chamber_data:
         tweets = TwitterData()
         tmp = tweets.list_members_request(slug=i['slug'], owner_screen_name=i['owner_screen_name'], chamber=i['chamber'], party=i['party'])
-        congress.append(tmp)
+        congress = congress + tmp
     return congress
