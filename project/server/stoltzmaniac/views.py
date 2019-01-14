@@ -78,6 +78,7 @@ def congressional_tweets():
     return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, h_dem=h_dem, h_rep=h_rep, wordcloud='')
 
 
+# TODO: Add CSRF protection
 @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<party>", methods=["POST"])
 @login_required
 def generate_wc(screen_name, party):
