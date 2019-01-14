@@ -14,18 +14,21 @@ class TwitterData:
         self.request_results = []
         self.unpacked_results = []
 
-    def timeline_request(self, screen_name):
+    def timeline_request(self, screen_name, **kwargs):
         self.request_results = twtr.GetUserTimeline(screen_name=screen_name, count=self.count)
-        return self.request_results
+        data = self.unpack_data(**kwargs)
+        return data
 
-    def search_request(self, search_term):
+    def search_request(self, search_term, **kwargs):
         search_query = (f"q={quote_plus(search_term)}&count={str(self.count)}")
         self.request_results = twtr.GetSearch(raw_query=search_query)
-        return self.request_results
+        data = self.unpack_data(**kwargs)
+        return data
 
-    def list_members_request(self, slug, owner_screen_name):
+    def list_members_request(self, slug, owner_screen_name, **kwargs):
         self.request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
-        return self.request_results
+        data = self.unpack_data(**kwargs)
+        return data
 
     def unpack_data(self, **kwargs):
         data = []
