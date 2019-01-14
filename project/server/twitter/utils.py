@@ -16,15 +16,18 @@ class TwitterData:
 
     def timeline_request(self, screen_name):
         self.request_results = twtr.GetUserTimeline(screen_name=screen_name, count=self.count)
+        return self.request_results
 
     def search_request(self, search_term):
         search_query = (f"q={quote_plus(search_term)}&count={str(self.count)}")
         self.request_results = twtr.GetSearch(raw_query=search_query)
+        return self.request_results
 
     def list_members_request(self, slug, owner_screen_name):
         self.request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
+        return self.request_results
 
-    def unpack_data(self):
+    def unpack_data(self, **kwargs):
         data = []
         for r in self.request_results:
             d = r.AsDict()
@@ -34,6 +37,7 @@ class TwitterData:
             )
             data.append(d)
         self.unpacked_results = data
+        self.unpacked_results = [dict(i, **kwargs) for i in self.unpacked_results]
         return self.unpacked_results
 
 
@@ -75,6 +79,7 @@ def twitter_congressional_list():
     d_senate = [dict(i.AsDict(), chamber='senate', party='democrat') for i in twtr.GetListMembers(slug='senatedemocrats', owner_screen_name='SenateDems')]
     congress = r_house + d_house + r_senate + d_senate
     return congress
+
 
 
 

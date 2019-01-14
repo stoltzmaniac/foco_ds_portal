@@ -5,7 +5,7 @@ import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, twitter_timeline2
+from project.server.twitter.utils import TwitterData, twitter_search, twitter_timeline, twitter_congressional_list, twitter_timeline2
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
