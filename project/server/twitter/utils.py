@@ -7,6 +7,37 @@ from flask import jsonify
 from project.server.utils import twtr
 
 
+class TwitterData:
+
+    def __init__(self):
+        self.count = 100
+        self.request_results = []
+        self.unpacked_results = []
+
+    def timeline_request(self, screen_name):
+        self.request_results = twtr.GetUserTimeline(screen_name=screen_name, count=self.count)
+
+    def search_request(self, search_term):
+        search_query = (f"q={quote_plus(search_term)}&count={str(self.count)}")
+        self.request_results = twtr.GetSearch(raw_query=search_query)
+
+    def list_members_request(self, slug, owner_screen_name):
+        self.request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
+
+    def unpack(self):
+        data = []
+        for r in self.request_results:
+            d = r.AsDict()
+            d["timestamp"] = time.strftime(
+                "%Y-%m-%d %H:%M:%S",
+                time.strptime(d["created_at"], "%a %b %d %H:%M:%S +0000 %Y"),
+            )
+            data.append(d)
+        self.unpacked_results = data
+        return self.unpacked_results
+
+
+
 def twitter_search(request) -> list:
     form_data = request.form
     search_query = (
