@@ -91,7 +91,7 @@ def store_daily_public_tweets(tweet_list: list, foco_ds_purpose: str) -> bool:
 def lookup_recent_tweets(foco_ds_purpose: str) -> list:
     current_day = str(dt.today())
     tweet_db = mdb.db.tweets
-    results = tweet_db.find({"foco_ds_purpose": foco_ds_purpose, "foco_ds_purpose": foco_ds_purpose})
+    results = tweet_db.find({"foco_ds_purpose": foco_ds_purpose, "foco_ds_insert_date": current_day})
     data = [i for i in results]
     if data:
         return data
