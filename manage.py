@@ -66,18 +66,20 @@ def test():
 @cli.command()
 def cov():
     """Runs the unit tests with coverage."""
-    tests = unittest.TestLoader().discover("project/tests")
-    result = unittest.TextTestRunner(verbosity=2).run(tests)
-    if result.wasSuccessful():
-        COV.stop()
-        COV.save()
-        print("Coverage Summary:")
-        COV.report()
-        COV.html_report()
-        COV.erase()
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    import pytest
+    rv = pytest.main(["project/tests_pytest", "--cov"])
+    # tests = unittest.TestLoader().discover("project/tests")
+    # result = unittest.TextTestRunner(verbosity=2).run(tests)
+    # if result.wasSuccessful():
+    #     COV.stop()
+    #     COV.save()
+    #     print("Coverage Summary:")
+    #     COV.report()
+    #     COV.html_report()
+    #     COV.erase()
+    #     sys.exit(0)
+    # else:
+    #     sys.exit(1)
 
 
 @cli.command()

@@ -13,10 +13,11 @@ Flask-WTF==0.14.2
 psycopg2-binary
 
 # Extras
+python-coveralls
 pytest
+pytest-cov
 WebTest
 factory-boy
-python-coveralls
 black
 pandas
 pymongo
