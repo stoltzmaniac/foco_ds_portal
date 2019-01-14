@@ -68,6 +68,7 @@ def tweet_timeline():
 
 
 @stoltzmaniac_blueprint.route('/congress', methods=['GET'])
+@login_required
 def congressional_tweets():
     data = twitter_congressional_list()
     df = pd.DataFrame(data)
@@ -79,6 +80,7 @@ def congressional_tweets():
 
 
 @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<party>", methods=["POST"])
+@login_required
 def generate_wc(screen_name, party):
     img_url = 'https://i.postimg.cc/VkPvgL8K/ele.png'
     if party == 'democrat':
