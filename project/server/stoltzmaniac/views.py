@@ -74,9 +74,6 @@ def congressional_tweets():
     if not data:
         data = twitter_congressional_list()
         w_data = store_daily_public_tweets(data, foco_ds_purpose)
-        print('**********No DATA&&&&&&&&&&&&&')
-        print(w_data)
-        print('**********&&&&&&&&&&&&&')
     df = pd.DataFrame(data)
     s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
     s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
