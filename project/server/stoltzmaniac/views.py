@@ -73,16 +73,18 @@ def congressional_tweets():
     df = pd.DataFrame(data)
     s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
     s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
-    s_hor = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
-    d_hor = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
-    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, s_hor=s_hor, d_hor=d_hor, wordcloud='')
+    h_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
+    h_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
+    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, h_dem=h_dem, h_rep=h_rep, wordcloud='')
 
 
-@stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>", methods=["POST"])
-def generate_wc(screen_name):
-    print(screen_name)
+@stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<party>", methods=["POST"])
+def generate_wc(screen_name, party):
+    img_url = 'https://i.postimg.cc/VkPvgL8K/ele.png'
+    if party == 'democrat':
+        img_url = 'https://i.postimg.cc/GmvWPbLJ/donk.jpg'
     wordcloud_data = twitter_timeline2(screen_name)
-    wordcloud = generate_wordcloud(wordcloud_data)
+    wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
 
 

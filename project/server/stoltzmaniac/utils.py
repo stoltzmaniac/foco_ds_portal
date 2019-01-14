@@ -69,8 +69,7 @@ def clean_list_of_text(wordcloud_data):
     return words
 
 
-def generate_wordcloud(wordcloud_data) -> plt:
-    image_url = "https://i.postimg.cc/VkPvgL8K/ele.png"
+def generate_wordcloud(wordcloud_data, image_url) -> plt:
     words = clean_list_of_text(wordcloud_data)
     img_response = requests_lib.get(image_url)
     img = Image.open(BytesIO(img_response.content))

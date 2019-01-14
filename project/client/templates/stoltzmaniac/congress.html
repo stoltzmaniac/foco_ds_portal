@@ -16,6 +16,12 @@
             max-height: 100vh;
             margin: auto;
         }
+        .row {
+            display: flex;
+        }
+        .column {
+            flex: 50%;
+        }
     </style>
 {% endblock %}
 
@@ -30,26 +36,56 @@
                 </div>
             </div>
 
-
-
-            <strong>Dem Senate</strong>
-            <div>
-                {% for sd in s_dem %}
-                    <a class="image" name="{{ sd['screen_name'] | safe }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
-                    <br>
-                {% endfor %}
+            <div class="row">
+                <div class="column">
+                    <strong>Senate Democrats</strong>
+                    <hr>
+                    {% for sd in s_dem %}
+                        <a class="image" name="{{ sd['screen_name'] | safe }}" party="{{ sd['party'] }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    <strong>Senate Republicans</strong>
+                    <hr>
+                    {% for sd in s_rep %}
+                        <a class="image" name="{{ sd['screen_name'] | safe }}" party="{{ sd['party'] }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+            <br/>
+            <hr>
+            <br/>
+            <div class="row">
+                <div class="column">
+                    <strong>House Democrats</strong>
+                    <hr>
+                    {% for sd in h_dem %}
+                        <a class="image" name="{{ sd['screen_name'] | safe }}" party="{{ sd['party'] }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div class="column">
+                    <strong>House Republicans</strong>
+                    <hr>
+                    {% for sd in h_rep %}
+                        <a class="image" name="{{ sd['screen_name'] | safe }}" party="{{ sd['party'] }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
+                        <br>
+                    {% endfor %}
+                </div>
             </div>
     </div>
 
 
     <script>
-
         $(document).ready(function () {
-            var clicked;
-            var screen_name = "SenSanders";
+            var screen_name;
+            var party;
             $(".image").click(function () {
-                clicked = $(this).attr("name");
-                $.post("./generate_cloud/" + clicked, function( data ) {
+                screen_name = $(this).attr("name");
+                party = $(this).attr("party")
+                $.post("./generate_cloud/" + screen_name + "/" + party, function( data ) {
                     $( "#wordcloud" ).attr("src", "data:image/png;base64, " + data);
                 })
             });
