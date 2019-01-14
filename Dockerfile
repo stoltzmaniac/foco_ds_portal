@@ -3,6 +3,7 @@ FROM python:3.6.5-slim
 # install netcat
 RUN apt-get update \
   && apt-get -y install netcat \
+  && apt-get -y install git-core \
   && apt-get clean
 
 # set working directory
