@@ -4,15 +4,12 @@ import requests as requests_lib
 from io import BytesIO
 
 from textblob import TextBlob
-
 import numpy as np
 import pandas as pd
 import altair as alt
 import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
-from IPython.display import Image as im
-
 
 
 def download_csv() -> pd.DataFrame:
@@ -88,3 +85,4 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     plt.savefig(tmpfile, format='png', bbox_inches="tight", pad_inches=0)
     encoded = base64.b64encode(tmpfile.getvalue())
     return encoded
+
