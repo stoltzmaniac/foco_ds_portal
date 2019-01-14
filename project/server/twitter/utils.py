@@ -39,8 +39,7 @@ class TwitterData:
                 time.strptime(d["created_at"], "%a %b %d %H:%M:%S +0000 %Y"),
             )
             data.append(d)
-        self.unpacked_results = data
-        self.unpacked_results = [dict(i, **kwargs) for i in self.unpacked_results]
+        self.unpacked_results = [dict(i, **kwargs) for i in data]
         return self.unpacked_results
 
 
