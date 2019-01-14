@@ -24,7 +24,7 @@ class TwitterData:
     def list_members_request(self, slug, owner_screen_name):
         self.request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
 
-    def unpack(self):
+    def unpack_data(self):
         data = []
         for r in self.request_results:
             d = r.AsDict()
