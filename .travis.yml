@@ -16,4 +16,4 @@ script:
   - docker-compose run web python manage.py cov
 
 after_success:
-  - coveralls
+  - docker exec -i -t foco_ds_portal_web_1 coveralls
