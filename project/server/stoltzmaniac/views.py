@@ -5,7 +5,7 @@ import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, twitter_timeline2
+from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
@@ -37,8 +37,8 @@ def twitter_sentiment():
         return render_template("stoltzmaniac/twitter_sentiment.html", myform=form)
 
     elif request.method == "POST" and form.validate_on_submit():
-        chart_data = []
-        data = twitter_search(request)
+        form_data = form.data
+        data = twitter_search(search_term=form_data['search_term'], count=form_data['count'])
         sentiment = analyze_tweet_sentiment(data)
         return render_template(
             "stoltzmaniac/twitter_sentiment.html",
@@ -48,7 +48,6 @@ def twitter_sentiment():
         )
 
 
-# TODO: Clean up how to pass request only once
 @stoltzmaniac_blueprint.route("/twitter_timeline", methods=["GET", "POST"])
 @login_required
 def tweet_timeline():
@@ -57,8 +56,8 @@ def tweet_timeline():
         return render_template("stoltzmaniac/twitter_timeline.html", myform=form)
 
     elif request.method == "POST" and form.validate_on_submit():
-        wordcloud_data = twitter_timeline(request)
-        form_data = request.form
+        form_data = form.data
+        wordcloud_data = twitter_timeline(form_data['username'])
         wordcloud = generate_wordcloud(wordcloud_data, form_data['image_url'])
         return render_template(
             "stoltzmaniac/twitter_timeline.html",
@@ -68,6 +67,7 @@ def tweet_timeline():
 
 
 @stoltzmaniac_blueprint.route('/congress', methods=['GET'])
+@login_required
 def congressional_tweets():
     data = twitter_congressional_list()
     df = pd.DataFrame(data)
@@ -78,18 +78,13 @@ def congressional_tweets():
     return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, h_dem=h_dem, h_rep=h_rep, wordcloud='')
 
 
+# TODO: Add CSRF protection
 @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<party>", methods=["POST"])
+@login_required
 def generate_wc(screen_name, party):
     img_url = 'https://i.postimg.cc/VkPvgL8K/ele.png'
     if party == 'democrat':
         img_url = 'https://i.postimg.cc/GmvWPbLJ/donk.jpg'
-    wordcloud_data = twitter_timeline2(screen_name)
+    wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
-
-
-# @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<img_url>", methods=["POST"])
-# def generate_wc(screen_name, img_url):
-#     wordcloud_data = twitter_timeline2(screen_name)
-#     wordcloud = generate_wordcloud(wordcloud_data, img_url)
-#     return jsonify(wordcloud=wordcloud.decode('utf-8'))
