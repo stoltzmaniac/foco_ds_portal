@@ -48,7 +48,6 @@ def twitter_sentiment():
         )
 
 
-# TODO: Clean up how to pass request only once
 @stoltzmaniac_blueprint.route("/twitter_timeline", methods=["GET", "POST"])
 @login_required
 def tweet_timeline():
