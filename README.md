@@ -1,5 +1,5 @@
-![](https://travis-ci.com/stoltzmaniac/foco_ds_portal.svg?branch=master)
-
+![Build Status](https://travis-ci.com/stoltzmaniac/foco_ds_portal.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/stoltzmaniac/foco_ds_portal/badge.svg)](https://coveralls.io/github/stoltzmaniac/foco_ds_portal)
 # FoCo DS Portal
 
 ## Quick Start
