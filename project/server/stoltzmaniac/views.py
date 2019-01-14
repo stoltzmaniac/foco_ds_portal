@@ -88,10 +88,3 @@ def generate_wc(screen_name, party):
     wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
-
-
-# @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<img_url>", methods=["POST"])
-# def generate_wc(screen_name, img_url):
-#     wordcloud_data = twitter_timeline2(screen_name)
-#     wordcloud = generate_wordcloud(wordcloud_data, img_url)
-#     return jsonify(wordcloud=wordcloud.decode('utf-8'))
