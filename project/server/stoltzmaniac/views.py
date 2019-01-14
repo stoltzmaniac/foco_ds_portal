@@ -5,7 +5,7 @@ import pandas as pd
 
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import TwitterData, twitter_search, twitter_timeline, twitter_congressional_list, twitter_congressional_list2, twitter_timeline2
+from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 
 
@@ -37,8 +37,8 @@ def twitter_sentiment():
         return render_template("stoltzmaniac/twitter_sentiment.html", myform=form)
 
     elif request.method == "POST" and form.validate_on_submit():
-        chart_data = []
-        data = twitter_search(request)
+        form_data = form.data
+        data = twitter_search(search_term=form_data['search_term'], count=form_data['count'])
         sentiment = analyze_tweet_sentiment(data)
         return render_template(
             "stoltzmaniac/twitter_sentiment.html",
@@ -57,8 +57,8 @@ def tweet_timeline():
         return render_template("stoltzmaniac/twitter_timeline.html", myform=form)
 
     elif request.method == "POST" and form.validate_on_submit():
-        wordcloud_data = twitter_timeline(request)
-        form_data = request.form
+        form_data = form.data
+        wordcloud_data = twitter_timeline(form_data['username'])
         wordcloud = generate_wordcloud(wordcloud_data, form_data['image_url'])
         return render_template(
             "stoltzmaniac/twitter_timeline.html",
@@ -69,9 +69,7 @@ def tweet_timeline():
 
 @stoltzmaniac_blueprint.route('/congress', methods=['GET'])
 def congressional_tweets():
-    # data = twitter_congressional_list()
-    data = twitter_congressional_list2()
-    print(data)
+    data = twitter_congressional_list()
     df = pd.DataFrame(data)
     s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
     s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
@@ -85,7 +83,7 @@ def generate_wc(screen_name, party):
     img_url = 'https://i.postimg.cc/VkPvgL8K/ele.png'
     if party == 'democrat':
         img_url = 'https://i.postimg.cc/GmvWPbLJ/donk.jpg'
-    wordcloud_data = twitter_timeline2(screen_name)
+    wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
 
