@@ -24,22 +24,37 @@
     <div class="container">
         <h1 class="mt-5">Stoltzmaniac - Congress</h1>
 
-            {% if wordcloud %}
-
+            <div class="result">
                 <div class="imgbox">
-                    <img class="center-fit" src="data:image/png;base64, {{ wordcloud }} "/>
+                    <img id="wordcloud" class="center-fit" src=""/>
                 </div>
+            </div>
 
-            {% endif %}
 
 
             <strong>Dem Senate</strong>
             <div>
                 {% for sd in s_dem %}
-                    <img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt="">  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
+                    <a class="image" name="{{ sd['screen_name'] | safe }}" href="#"><img class="img-fluid" src={{ sd['profile_image_url'] | safe }} alt=""></a>  -  {{ sd['screen_name'] | safe }} - {{ sd['name'] }}
                     <br>
                 {% endfor %}
             </div>
     </div>
+
+
+    <script>
+
+        $(document).ready(function () {
+            var clicked;
+            var screen_name = "SenSanders";
+            $(".image").click(function () {
+                clicked = $(this).attr("name");
+                $.post("./generate_cloud/" + clicked, function( data ) {
+                    $( "#wordcloud" ).attr("src", "data:image/png;base64, " + data);
+                })
+            });
+        });
+    </script>
+
 
 {% endblock %}

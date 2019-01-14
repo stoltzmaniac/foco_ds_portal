@@ -75,12 +75,19 @@ def congressional_tweets():
     s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
     s_hor = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
     d_hor = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
-    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, s_hor=s_hor, d_hor=d_hor)
+    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, s_hor=s_hor, d_hor=d_hor, wordcloud='')
 
 
-# TODO: Clean up how to pass request only once
-@stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<img_url>", methods=["POST"])
-def wc2(screen_name, img_url):
+@stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>", methods=["POST"])
+def generate_wc(screen_name):
+    print(screen_name)
     wordcloud_data = twitter_timeline2(screen_name)
-    wordcloud = generate_wordcloud(wordcloud_data, img_url)
-    return jsonify(wordcloud=wordcloud.decode('utf-8'))
+    wordcloud = generate_wordcloud(wordcloud_data)
+    return wordcloud.decode('utf-8')
+
+
+# @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<img_url>", methods=["POST"])
+# def generate_wc(screen_name, img_url):
+#     wordcloud_data = twitter_timeline2(screen_name)
+#     wordcloud = generate_wordcloud(wordcloud_data, img_url)
+#     return jsonify(wordcloud=wordcloud.decode('utf-8'))
