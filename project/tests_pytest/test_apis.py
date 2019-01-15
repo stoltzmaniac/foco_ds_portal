@@ -1,8 +1,11 @@
 import datetime as dt
 
 import pytest
+import quandl
+import pandas as pd
 
 from project.server.user.models import User, Role
+from project.server.config import BaseConfig
 from project.server.twitter.utils import TwitterData, twtr
 from .factories import UserFactory
 
@@ -51,3 +54,21 @@ class TestApiTwitter:
         assert len(data) > 1
         assert type(data[0]) == dict
         assert type(data[0]['screen_name']) == str
+
+
+class TestQuandlApi:
+    """Quandl API tests"""
+
+    def test_get_table(self):
+        fields = ['ticker', 'date', 'adj_close']
+        tickers = ['AAPL', 'MSFT']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        quandl.ApiConfig.api_key = BaseConfig.QUANDL_KEY
+        data = quandl.get_table('WIKI/PRICES', ticker=tickers,
+                                qopts={'columns': fields},
+                                date={'gte': start_date, 'lte': end_date},
+                                paginate=True)
+        assert type(data) == pd.DataFrame
+        assert sorted(data.columns.tolist()) == sorted(fields)
+        assert sorted(data['ticker'].unique().tolist()) == sorted(tickers)
