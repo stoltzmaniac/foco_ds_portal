@@ -30,6 +30,6 @@ def get_daily_adj_close(symbols, start_date, end_date):
                             paginate=True)
     data = data.reset_index()
     plot = plot_line(data)
-    return plot.to_json()
+    return plot.to_html()
 
 
