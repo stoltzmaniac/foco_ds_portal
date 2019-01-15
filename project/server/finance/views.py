@@ -24,9 +24,6 @@ def home():
 def get_daily_adj_close(tickers, start_date, end_date):
     """symbols should be comma separated with no spaces"""
     symbols = tickers.split(',')
-    print(start_date)
-    print(end_date)
-    print(symbols)
     qd = QuandlData()
     fp = FinancePlots()
     data = qd.daily_close_ticker_request(symbols, start_date, end_date)
@@ -34,6 +31,6 @@ def get_daily_adj_close(tickers, start_date, end_date):
                               x_axis='date',
                               y_axis='adj_close',
                               color='ticker')
-    return plot.to_html()
+    return plot
 
 
