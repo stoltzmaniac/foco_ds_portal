@@ -21,7 +21,7 @@ def home():
 
 
 @finance_blueprint.route("/data/<tickers>/<start_date>/<end_date>", methods=["POST"])
-def get_daily_adj_close(tickers, start_date, end_date):
+def plot_tickers_over_time(tickers, start_date, end_date):
     """symbols should be comma separated with no spaces"""
     symbols = tickers.split(',')
     qd = QuandlData()
