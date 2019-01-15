@@ -62,7 +62,7 @@ def create_app(script_info=None):
     app.register_blueprint(finance_blueprint)
 
     # flask login
-    from project.server.models import User
+    from project.server.user.models import User
 
     login_manager.login_view = "user.login"
     login_manager.login_message_category = "danger"

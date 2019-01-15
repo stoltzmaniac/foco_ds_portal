@@ -4,7 +4,7 @@ from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 
 from project.server import db
-from project.server.models import User
+from project.server.user.models import User
 
 
 class BaseFactory(SQLAlchemyModelFactory):
