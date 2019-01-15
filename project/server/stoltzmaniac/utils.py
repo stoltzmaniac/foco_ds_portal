@@ -77,7 +77,7 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     wc = WordCloud(background_color="white", max_words=2000, mask=mask)
     clean_string = ','.join(words)
     wc.generate(clean_string)
-    f = plt.figure(figsize=(25, 25))
+    f = plt.figure(figsize=(15, 15))
     f.add_subplot(1, 2, 1)
     plt.imshow(wc, interpolation='bilinear')
     plt.axis("off")

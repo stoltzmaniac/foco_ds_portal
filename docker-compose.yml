@@ -27,6 +27,7 @@ services:
       - TWTR_CONSUMER_SECRET=${TWTR_CONSUMER_SECRET}
       - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
       - TWTR_TOKEN_SECRET=${TWTR_TOKEN_SECRET}
+      - QUANDL_KEY=${QUANDL_KEY}
     depends_on:
       - web-db
 

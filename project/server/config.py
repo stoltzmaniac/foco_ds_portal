@@ -22,6 +22,7 @@ class BaseConfig(object):
     TWTR_CONSUMER_SECRET = os.getenv("TWTR_CONSUMER_SECRET")
     TWTR_TOKEN_KEY = os.getenv("TWTR_TOKEN_KEY")
     TWTR_TOKEN_SECRET = os.getenv("TWTR_TOKEN_SECRET")
+    QUANDL_KEY = os.getenv("QUANDL_KEY")
 
 
 class DevelopmentConfig(BaseConfig):
