@@ -8,7 +8,7 @@ from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
 from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, lookup_recent_tweets, store_daily_public_tweets
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
 from project.server.finance.forms import TickerForm
-from project.server.finance.utils import quandl, plot_line, QuandlData, FinancePlots
+from project.server.finance.utils import quandl, QuandlData, FinancePlots
 
 
 finance_blueprint = Blueprint("finance", __name__, url_prefix="/finance")
