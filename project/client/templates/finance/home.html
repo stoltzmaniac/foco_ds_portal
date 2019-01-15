@@ -1,0 +1,54 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>Finance Projects</h2>
+        <hr>
+        <form id="form">
+            {{ myform.ticker.label }}
+            {{ myform.ticker }}
+
+            {{ myform.start_date.label }}
+            {{ myform.start_date }}
+
+            {{ myform.end_date.label }}
+            {{ myform.end_date }}
+            <input class="btn btn-primary" type="submit" value="Plot"/>
+        </form>
+
+        <br/>
+
+        <div class="container" id="plot">
+            {% if plot %}
+                {{ plot | safe }}
+            {% endif %}
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function (e) {
+                var form_data = {};
+                $.each($('#form').serializeArray(), function(i, field) {
+                    form_data[field.name] = field.value;
+                });
+                var url = "./data/" + form_data['ticker'] + "/" + form_data['start_date'] + "/" + form_data['end_date'];
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+                e.preventDefault(); // block the traditional submission of the form.
+            });
+        });
+    </script>
+
+
+{% endblock %}
+
