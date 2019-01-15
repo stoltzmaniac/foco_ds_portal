@@ -84,10 +84,12 @@
             var screen_name;
             var party;
             $(".image").click(function () {
+                $("body").css("cursor", "progress");
                 screen_name = $(this).attr("name");
                 party = $(this).attr("party")
                 $.post("./generate_cloud/" + screen_name + "/" + party, function( data ) {
                     $( "#wordcloud" ).attr("src", "data:image/png;base64, " + data);
+                    $("body").css("cursor", "default");
                 })
             });
         });

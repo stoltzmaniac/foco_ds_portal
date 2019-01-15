@@ -32,6 +32,7 @@
     <script>
         $(document).ready(function() {
             $('form').submit(function (e) {
+                $("body").css("cursor", "progress");
                 var form_data = {};
                 $.each($('#form').serializeArray(), function(i, field) {
                     form_data[field.name] = field.value;
@@ -43,6 +44,7 @@
                     success: function (data) {
                         var wind = window.open("", "popupWindow", "width=600,height=600,scrollbars=no");
                         wind.document.write(data);
+                        $("body").css("cursor", "default");
                     }
                 });
                 e.preventDefault(); // block the traditional submission of the form.
