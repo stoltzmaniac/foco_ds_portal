@@ -21,6 +21,7 @@ factory-boy
 black
 pandas
 quandl
+plotly
 pymongo
 altair
 flask-mongoengine

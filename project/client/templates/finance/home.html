@@ -42,8 +42,9 @@
                     type: "POST",
                     url: url,
                     success: function (data) {
-                        var wind = window.open("", "popupWindow", "width=600,height=600,scrollbars=no");
-                        wind.document.write(data);
+                        {#var wind = window.open("", "popupWindow", "width=600,height=600,scrollbars=no");#}
+                        {#wind.document.write(data);#}
+                        $("#plot").html(data);
                         $("body").css("cursor", "default");
                     }
                 });
