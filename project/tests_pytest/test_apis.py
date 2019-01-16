@@ -61,7 +61,8 @@ class TestApiTwitter:
 class TestQuandlApi:
     """Quandl API tests"""
 
-    def test_get_table(self):
+    def test_get_table_stock_data(self):
+        """Test quandl returns stock data"""
         fields = ['ticker', 'date', 'adj_close']
         tickers = ['AAPL', 'MSFT']
         start_date = '2015-01-01'
@@ -76,6 +77,7 @@ class TestQuandlApi:
         assert sorted(data['ticker'].unique().tolist()) == sorted(tickers)
 
     def test_quandl_data_daily_close_ticker_request(self):
+        """Test quandl returns stock data from QuandlData instance"""
         qd = QuandlData()
         symbols = ['AAPL', 'MSFT']
         fields = ['ticker', 'date', 'adj_close']
@@ -87,6 +89,7 @@ class TestQuandlApi:
         assert sorted(data['ticker'].unique().tolist()) == sorted(symbols)
 
     def test_plot_tickers_over_time(self):
+        """Test quandl data is plotted with plotly"""
         qd = QuandlData()
         fp = FinancePlots()
         symbols = ['AAPL', 'MSFT']
