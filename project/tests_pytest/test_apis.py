@@ -1,9 +1,14 @@
 import datetime as dt
 
 import pytest
+import quandl
+import pandas as pd
+from plotly.offline import plot
 
 from project.server.user.models import User, Role
+from project.server.config import BaseConfig
 from project.server.twitter.utils import TwitterData, twtr
+from project.server.finance.utils import QuandlData, FinancePlots
 from .factories import UserFactory
 
 
@@ -51,3 +56,46 @@ class TestApiTwitter:
         assert len(data) > 1
         assert type(data[0]) == dict
         assert type(data[0]['screen_name']) == str
+
+
+class TestQuandlApi:
+    """Quandl API tests"""
+
+    def test_get_table_stock_data(self):
+        """Test quandl returns stock data"""
+        fields = ['ticker', 'date', 'adj_close']
+        tickers = ['AAPL', 'MSFT']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        quandl.ApiConfig.api_key = BaseConfig.QUANDL_KEY
+        data = quandl.get_table('WIKI/PRICES', ticker=tickers,
+                                qopts={'columns': fields},
+                                date={'gte': start_date, 'lte': end_date},
+                                paginate=True)
+        assert type(data) == pd.DataFrame
+        assert sorted(data.columns.tolist()) == sorted(fields)
+        assert sorted(data['ticker'].unique().tolist()) == sorted(tickers)
+
+    def test_quandl_data_daily_close_ticker_request(self):
+        """Test quandl returns stock data from QuandlData instance"""
+        qd = QuandlData()
+        symbols = ['AAPL', 'MSFT']
+        fields = ['ticker', 'date', 'adj_close']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        data = qd.daily_close_ticker_request(symbols, start_date, end_date)
+        assert type(data) == pd.DataFrame
+        assert sorted(data.columns.tolist()) == sorted(fields)
+        assert sorted(data['ticker'].unique().tolist()) == sorted(symbols)
+
+    def test_plot_tickers_over_time(self):
+        """Test quandl data is plotted with plotly"""
+        qd = QuandlData()
+        fp = FinancePlots()
+        symbols = ['AAPL', 'MSFT']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        data = qd.daily_close_ticker_request(symbols, start_date, end_date)
+        plot = fp.line_plot(data, x_axis='date', y_axis='adj_close', color='ticker')
+        assert type(plot) == str
+        assert '<div><script type="text/javascript">window.PlotlyConfig' in plot
