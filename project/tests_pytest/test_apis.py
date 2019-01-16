@@ -3,10 +3,12 @@ import datetime as dt
 import pytest
 import quandl
 import pandas as pd
+from plotly.offline import plot
 
 from project.server.user.models import User, Role
 from project.server.config import BaseConfig
 from project.server.twitter.utils import TwitterData, twtr
+from project.server.finance.utils import QuandlData, FinancePlots
 from .factories import UserFactory
 
 
@@ -72,3 +74,25 @@ class TestQuandlApi:
         assert type(data) == pd.DataFrame
         assert sorted(data.columns.tolist()) == sorted(fields)
         assert sorted(data['ticker'].unique().tolist()) == sorted(tickers)
+
+    def test_quandl_data_daily_close_ticker_request(self):
+        qd = QuandlData()
+        symbols = ['AAPL', 'MSFT']
+        fields = ['ticker', 'date', 'adj_close']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        data = qd.daily_close_ticker_request(symbols, start_date, end_date)
+        assert type(data) == pd.DataFrame
+        assert sorted(data.columns.tolist()) == sorted(fields)
+        assert sorted(data['ticker'].unique().tolist()) == sorted(symbols)
+
+    def test_plot_tickers_over_time(self):
+        qd = QuandlData()
+        fp = FinancePlots()
+        symbols = ['AAPL', 'MSFT']
+        start_date = '2015-01-01'
+        end_date = '2016-01-01'
+        data = qd.daily_close_ticker_request(symbols, start_date, end_date)
+        plot = fp.line_plot(data, x_axis='date', y_axis='adj_close', color='ticker')
+        assert type(plot) == str
+        assert '<div><script type="text/javascript">window.PlotlyConfig' in plot
