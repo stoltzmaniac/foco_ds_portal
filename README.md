@@ -78,3 +78,25 @@ Do you have the desire to add something to this project? If so, please follow th
 If you are going to add a data source, try to follow what's going on in the `project/twitter` directory. 
 If your data sources require environment variables please let me know how to make my own accounts for those 
 services so we can allow everyone to access that data!
+
+### Adding SSL / TLS
+
+The Nginx container has a [Let's Encrypt](https://letsencrypt.org/) client installed called `certbot`. If you are running on a server that a valid domain name points to, you can obtain certificates and instruct Nginx to use them for SSL / TLS. You must first execute `certbot` and provide information specific to your server / domain.
+
+1. Before you begin, change the `server_name` parameter in your `projects/nginx/nginx.conf` file from `localhost` to your domain name (e.g. `example.com`).
+2. You need to rebuild your Nginx container for the changes to take effect. Alternatively, you can manually copy the new file into the container but you will have to restart the container or enter the shell and reload Nginx.
+3. Open a shell in the running Nginx container.
+  - `docker-compose exec web-nginx sh`
+4. Once at the Nginx containers shell prompt, run the `certbot` client.
+  - `certbot certbot --authenticator webroot --installer nginx --webroot-path /var/letsencrypt --staging`
+  - You will be prompted for information and decisions. Specifically:
+    - The domain name you are obtaining a certificate for. This can be provided on the command line with the `--domain` option.
+    - An email address to receive information from Let's Encrypt like certificate expiration notices. This can be provided on the command line with the `--email` option.
+    - You will have to agree to the terms of service. This can be skipped on the command line with `--agree-tos`.
+    - Do you want to configure Nginx to redirect all insecure requests (port 80) to the secure port, 443? This can be specified on the command line with `--redirect` or `--no-redirect`.
+5. The above command uses the `--staging` option which will test your configuration but not obtain valid certificates. This is useful so that you do not hit any request limits with Let's Encrypt while you are testing. 
+  - At this point you should be able to connect to your site using HTTPS but the certificate will not be valid and the browser will likely complain.
+6. Once you are satisfied that the request is successful, re-run the above command without `--staging`.
+7. Exit the Nginx shell with `exit`.
+
+You should now be able to establish a secure connection to your server.
