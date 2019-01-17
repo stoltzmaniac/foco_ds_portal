@@ -21,7 +21,6 @@ class TestApiTwitter:
         response = twtr.GetUserTimeline(screen_name=screen_name)
         assert len(response) > 1
         assert response[0].user.screen_name == screen_name
-        assert response[0].source == '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>'
 
     def test_timeline_request(self):
         """Test twitter get  user timeline data"""
