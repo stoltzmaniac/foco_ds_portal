@@ -5,15 +5,15 @@ RUN apt-get update \
   && apt-get clean
 
 # set working directory
-RUN mkdir -p /usr/src/app/twitter_stream
-WORKDIR /usr/src/app/twitter_stream
+RUN mkdir -p /usr/local/share/
+WORKDIR /usr/local/share/
 
 # add requirements
-COPY ./requirements.txt /usr/src/app/twitter_stream/requirements.txt
+COPY ./requirements.txt /usr/local/share/requirements.txt
 
 # install requirements
 RUN pip install -r requirements.txt
 
 
-COPY ./stream_listener.py /usr/src/app/twitter_stream/stream_listener.py
-RUN python stream_listener.py
+COPY ./stream_listener.py /usr/local/share/stream_listener.py
+CMD ["python", "./stream_listener.py"]
