@@ -1,4 +1,5 @@
 import os
+import json
 import tweepy
 from pymongo import MongoClient
 
@@ -12,7 +13,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 
 client = MongoClient(MONGO_URI)
 db = client.get_database()
-twitter_collection = db.twitter_stream
+twitter_collection = db.tweets
 
 
 auth = tweepy.OAuthHandler(TWTR_CONSUMER_KEY, TWTR_CONSUMER_SECRET)
@@ -23,8 +24,12 @@ api = tweepy.API(auth)
 class TweetListener(tweepy.StreamListener):
 
     def on_status(self, status):
-        # print(status.text)
         pass
+
+    def on_data(self, data):
+        all_data = json.loads(data)
+        print(all_data)
+        twitter_collection.insert_one(all_data)
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -33,6 +38,3 @@ class TweetListener(tweepy.StreamListener):
 
 stream = tweepy.Stream(auth=api.auth, listener=TweetListener())
 stream.filter(track=["rstats"])
-
-
-
