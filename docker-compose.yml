@@ -16,13 +16,13 @@ services:
       - FLASK_DEBUG=${FLASK_DEBUG}
       - PYTHONUNBUFFERED=0
       - APP_SETTINGS=${APP_SETTINGS}
-      - DATABASE_URL=postgresql://postgres:postgres@web-db:5432/users_dev
-      - DATABASE_TEST_URL=postgresql://postgres:postgres@web-db:5432/users_test
-      - SECRET_KEY=change_me_in_prod
-      - MONGO_URI=mongodb://web-mongo:27017/onehundreddaysofcode
-      - MONGODB_DB=onehundreddaysofcode
-      - MONGODB_HOST=web-db
-      - MONGODB_PORT=27017
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_TEST_URL=${DATABASE_TEST_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - MONGO_URI=${MONGO_URI}
+      - MONGODB_DB=${MONGODB_DB}
+      - MONGODB_HOST=web-mongo
+      - MONGODB_PORT=${MONGODB_PORT}
       - TWTR_CONSUMER_KEY=${TWTR_CONSUMER_KEY}
       - TWTR_CONSUMER_SECRET=${TWTR_CONSUMER_SECRET}
       - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
@@ -39,8 +39,8 @@ services:
     ports:
       - 5435:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   web-mongo:
     container_name: web-mongo
@@ -60,3 +60,16 @@ services:
     ports:
       - 80:80
       - 443:443
+
+#  twitter-stream:
+#    container_name: twitter-stream
+#    build:
+#      context: ./project/twitter_stream
+#      dockerfile: Dockerfile
+#    environment:
+#      - TWTR_CONSUMER_KEY=${TWTR_CONSUMER_KEY}
+#      - TWTR_CONSUMER_SECRET=${TWTR_CONSUMER_SECRET}
+#      - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
+#      - TWTR_TOKEN_SECRET=${TWTR_TOKEN_SECRET}
+#    depends_on:
+#      - web-mongo

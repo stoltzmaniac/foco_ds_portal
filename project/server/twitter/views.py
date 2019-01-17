@@ -41,7 +41,8 @@ def twitter():
         return render_template("twitter/index.html", myform=form, output=output)
 
     elif request.method == "POST" and form.validate_on_submit():
-        data = twitter_search(request)
+        form_data = form.data
+        data = twitter_search(form_data['search_term'], form_data['count'])
         for d in data:
             d["one_hundred_id"] = user_id
             tweets.insert_one(d)
