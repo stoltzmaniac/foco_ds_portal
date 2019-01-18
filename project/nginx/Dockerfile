@@ -13,5 +13,3 @@ RUN rm -rf /var/lib/apt/lists/*
 # Nginx configuration. It is the target for those GET requests.
 RUN mkdir /var/letsencrypt
 
-# Copy custom configuration file from the current directory
-COPY nginx.conf /etc/nginx/nginx.conf
