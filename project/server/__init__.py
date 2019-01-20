@@ -12,6 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
+from flask_dropzone import Dropzone
 
 
 # instantiate the extensions
@@ -23,6 +24,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 mdb = PyMongo()
 medb = MongoEngine()
+dropzone = Dropzone()
 
 
 def create_app(script_info=None):
@@ -43,6 +45,7 @@ def create_app(script_info=None):
     bcrypt.init_app(app)
     toolbar.init_app(app)
     bootstrap.init_app(app)
+    dropzone.init_app(app)
     mdb.init_app(app)
     medb.init_app(app)
     db.init_app(app)
