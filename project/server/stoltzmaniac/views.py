@@ -17,6 +17,11 @@ def home():
     return render_template("stoltzmaniac/home.html")
 
 
+@stoltzmaniac_blueprint.route("/drop_files", methods=["GET"])
+def drop_files():
+    return render_template("stoltzmaniac/drop_files.html")
+
+
 @stoltzmaniac_blueprint.route("/csv_example", methods=["GET"])
 def csv_example():
     data = download_csv()

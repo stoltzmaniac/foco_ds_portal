@@ -6,6 +6,7 @@ import datetime
 # from bson.objectid import ObjectId
 from flask import flash
 import twitter
+import boto3
 
 from project.server.config import BaseConfig
 
@@ -34,3 +35,10 @@ twtr = twitter.Api(
     access_token_key=BaseConfig.TWTR_TOKEN_KEY,
     access_token_secret=BaseConfig.TWTR_TOKEN_SECRET,
 )
+
+s3_session = boto3.Session(
+    aws_access_key_id=BaseConfig.S3_KEY,
+    aws_secret_access_key=BaseConfig.S3_SECRET
+)
+
+s3 = s3_session.resource('s3')

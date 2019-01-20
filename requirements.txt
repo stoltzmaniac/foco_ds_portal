@@ -34,3 +34,4 @@ matplotlib
 Pillow
 wordcloud
 ipython
+boto3
