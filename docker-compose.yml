@@ -60,15 +60,3 @@ services:
     ports:
       - 80:80
       - 443:443
-
-  twitter-stream:
-    container_name: twitter-stream
-    build:
-      context: ./project/twitter_stream
-      dockerfile: Dockerfile
-    environment:
-      - TWTR_CONSUMER_KEY=${TWTR_CONSUMER_KEY}
-      - TWTR_CONSUMER_SECRET=${TWTR_CONSUMER_SECRET}
-      - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
-      - TWTR_TOKEN_SECRET=${TWTR_TOKEN_SECRET}
-      - MONGO_URI=${MONGO_URI}
