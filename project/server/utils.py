@@ -41,4 +41,4 @@ s3_session = boto3.Session(
     aws_secret_access_key=BaseConfig.S3_SECRET
 )
 
-s3 = s3_session.resource('s3')
+s3 = s3_session.resource('s3').Bucket('foco-ds-portal-files')
