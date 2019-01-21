@@ -2,6 +2,7 @@ import re
 import base64
 import requests as requests_lib
 from io import BytesIO
+import datetime
 
 from textblob import TextBlob
 import numpy as np
@@ -10,12 +11,14 @@ import altair as alt
 import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
 
 
 def download_csv() -> pd.DataFrame:
     url = "http://samplecsvs.s3.amazonaws.com/SacramentocrimeJanuary2006.csv"
     data = pd.read_csv(url)
-    return data[0:1000]
+    return data
 
 
 def plot_altair() -> alt.Chart:
@@ -86,3 +89,14 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     encoded = base64.b64encode(tmpfile.getvalue())
     return encoded
 
+
+def linear_regression():
+    data = download_csv()
+    data = data.dropna()
+    data['timestamp'] = data['cdatetime'].apply(lambda x: datetime.datetime.strptime(x, "%m/%d/%y %H:%M"))
+    data['date'] = data['timestamp'].dt.date
+    data['hour'] = data['timestamp'].dt.hour
+    data['day_of_week'] = data['timestamp'].dt.weekday
+    data['ones'] = 1
+    d = data[['date', 'day_of_week', 'ones']]
+    d.groupby(['date', 'day_of_week']).agg('sum').groupby('day_of_week').agg('mean')
