@@ -28,6 +28,9 @@ services:
       - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
       - TWTR_TOKEN_SECRET=${TWTR_TOKEN_SECRET}
       - QUANDL_KEY=${QUANDL_KEY}
+      - S3_BUCKET= ${S3_BUCKET}
+      - S3_KEY=${S3_KEY}
+      - S3_SECRET=${S3_SECRET}
     depends_on:
       - web-db
 
@@ -63,15 +66,4 @@ services:
     volumes:
       - $NGINXCONF:/etc/nginx/conf.d
       - $SSLROOT:/etc/letsencrypt/live
-
-  twitter-stream:
-    container_name: twitter-stream
-    build:
-      context: ./project/twitter_stream
-      dockerfile: Dockerfile
-    environment:
-      - TWTR_CONSUMER_KEY=${TWTR_CONSUMER_KEY}
-      - TWTR_CONSUMER_SECRET=${TWTR_CONSUMER_SECRET}
-      - TWTR_TOKEN_KEY=${TWTR_TOKEN_KEY}
-      - TWTR_TOKEN_SECRET=${TWTR_TOKEN_SECRET}
-      - MONGO_URI=${MONGO_URI}
+  

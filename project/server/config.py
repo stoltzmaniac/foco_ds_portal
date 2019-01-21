@@ -23,6 +23,12 @@ class BaseConfig(object):
     TWTR_TOKEN_KEY = os.getenv("TWTR_TOKEN_KEY")
     TWTR_TOKEN_SECRET = os.getenv("TWTR_TOKEN_SECRET")
     QUANDL_KEY = os.getenv("QUANDL_KEY")
+    S3_BUCKET = os.getenv("S3_BUCKET")
+    S3_KEY = os.getenv("S3_KEY")
+    S3_SECRET = os.getenv("S3_SECRET")
+    DROPZONE_ALLOWED_FILE_TYPE='image'
+    DROPZONE_MAX_FILE_SIZE = 3
+    DROPZONE_MAX_FILES = 5
 
 
 class DevelopmentConfig(BaseConfig):
