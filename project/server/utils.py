@@ -57,7 +57,7 @@ class S3:
         return upload
 
     def upload_file_by_object(self, file: os.PathLike):
-        filename = f"{str(uuid.uuid4())}"
+        filename = f"{str(uuid.uuid4())}--{str(file.filename)}"
         upload = self.s3_bucket.put_object(Key=filename, Body=file)
         return upload
 
