@@ -95,8 +95,9 @@ def upload_s3():
     for key, f in request.files.items():
         s3 = S3()
         if key.startswith('file'):
-            s3.upload_file_by_object(f)
-    return jsonify({'status': 201})
+            upload, filename = s3.upload_file_by_object(f)
+    print(filename)
+    return jsonify({'file_location': filename})
 
 
 # TODO: Add CSRF protection
