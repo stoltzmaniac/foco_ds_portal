@@ -2,6 +2,8 @@
 """Helper utilities and decorators."""
 import json
 import datetime
+import uuid
+import os
 
 # from bson.objectid import ObjectId
 from flask import flash
@@ -36,9 +38,22 @@ twtr = twitter.Api(
     access_token_secret=BaseConfig.TWTR_TOKEN_SECRET,
 )
 
-s3_session = boto3.Session(
-    aws_access_key_id=BaseConfig.S3_KEY,
-    aws_secret_access_key=BaseConfig.S3_SECRET
-)
 
-s3 = s3_session.resource('s3').Bucket('foco-ds-portal-files')
+class S3:
+
+    def __init__(self):
+        self.s3_session = boto3.Session(
+            aws_access_key_id=BaseConfig.S3_KEY,
+            aws_secret_access_key=BaseConfig.S3_SECRET
+        )
+        self.bucket_name = 'foco-ds-portal-files'
+        self.s3_bucket = self.s3_session.resource('s3').Bucket(self.bucket_name)
+
+    def upload_file(self, file: str):
+        with open(file, 'r') as f:
+            data = f.read()
+        filename = f"{str(uuid.uuid4())}--{file}"
+        upload = self.s3_bucket.put_object(Key=filename, Body=data)
+        return upload
+
+
