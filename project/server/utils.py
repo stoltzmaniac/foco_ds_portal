@@ -49,11 +49,15 @@ class S3:
         self.bucket_name = 'foco-ds-portal-files'
         self.s3_bucket = self.s3_session.resource('s3').Bucket(self.bucket_name)
 
-    def upload_file(self, file: str):
+    def upload_file_by_name(self, file: str):
         with open(file, 'r') as f:
             data = f.read()
         filename = f"{str(uuid.uuid4())}--{file}"
         upload = self.s3_bucket.put_object(Key=filename, Body=data)
         return upload
 
+    def upload_file_by_object(self, file: os.PathLike):
+        filename = f"{str(uuid.uuid4())}"
+        upload = self.s3_bucket.put_object(Key=filename, Body=file)
+        return upload
 

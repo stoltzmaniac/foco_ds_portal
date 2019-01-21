@@ -12,7 +12,7 @@
         <h1 class="mt-5">Stoltzmaniac - Drag and Drop files example</h1>
         <strong>Drop your files below</strong>
             <div>
-                {{ dropzone.create(action='https://yahoo.com') }}
+                {{ dropzone.create(action=url_for('stoltzmaniac.upload_s3')) }}
             </div>
     </div>
 
