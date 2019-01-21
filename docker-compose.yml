@@ -63,3 +63,7 @@ services:
     ports:
       - 80:80
       - 443:443
+    volumes:
+      - $NGINXCONF:/etc/nginx/conf.d
+      - $SSLROOT:/etc/letsencrypt/live
+  
