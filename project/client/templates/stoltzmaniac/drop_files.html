@@ -1,0 +1,23 @@
+
+{% extends "_base.html" %}
+
+{% block css %}
+    {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="mt-5">Stoltzmaniac - Drag and Drop files example</h1>
+        <strong>Drop your files below</strong>
+            <div>
+                {{ dropzone.create(action=url_for('stoltzmaniac.upload_s3')) }}
+            </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ dropzone.load_js() }}
+{% endblock %}

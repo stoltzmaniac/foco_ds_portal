@@ -26,6 +26,7 @@ pymongo
 altair
 flask-mongoengine
 Flask-PyMongo
+flask-dropzone
 python-twitter
 textblob
 requests
@@ -33,3 +34,4 @@ matplotlib
 Pillow
 wordcloud
 ipython
+boto3

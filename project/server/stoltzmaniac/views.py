@@ -3,6 +3,7 @@ from flask import render_template, Blueprint, url_for, redirect, flash, request,
 from flask_login import login_required
 import pandas as pd
 
+from project.server.utils import S3
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
 from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, lookup_recent_tweets, store_daily_public_tweets
@@ -15,6 +16,11 @@ stoltzmaniac_blueprint = Blueprint("stoltzmaniac", __name__, url_prefix="/stoltz
 @stoltzmaniac_blueprint.route("/", methods=["GET"])
 def home():
     return render_template("stoltzmaniac/home.html")
+
+
+@stoltzmaniac_blueprint.route("/drop_files", methods=["GET"])
+def drop_files():
+    return render_template("stoltzmaniac/drop_files.html")
 
 
 @stoltzmaniac_blueprint.route("/csv_example", methods=["GET"])
@@ -80,6 +86,18 @@ def congressional_tweets():
     h_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
     h_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
     return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, h_dem=h_dem, h_rep=h_rep, wordcloud='')
+
+
+# TODO: Add CSRF protection
+@stoltzmaniac_blueprint.route("/upload_s3", methods=["POST"])
+@login_required
+def upload_s3():
+    for key, f in request.files.items():
+        s3 = S3()
+        if key.startswith('file'):
+            upload, filename = s3.upload_file_by_object(f)
+    print(filename)
+    return jsonify({'file_location': filename})
 
 
 # TODO: Add CSRF protection
