@@ -11,7 +11,7 @@ import altair as alt
 import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
-from sklearn import linear_model
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
 
@@ -90,13 +90,31 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     return encoded
 
 
-def linear_regression():
+def logistic_regression():
     data = download_csv()
     data = data.dropna()
     data['timestamp'] = data['cdatetime'].apply(lambda x: datetime.datetime.strptime(x, "%m/%d/%y %H:%M"))
     data['date'] = data['timestamp'].dt.date
     data['hour'] = data['timestamp'].dt.hour
     data['day_of_week'] = data['timestamp'].dt.weekday
-    data['ones'] = 1
-    d = data[['date', 'day_of_week', 'ones']]
-    d.groupby(['date', 'day_of_week']).agg('sum').groupby('day_of_week').agg('mean')
+    d = data.set_index('timestamp')
+    d = d[['district']]
+    d['tod'] = d.index.hour
+    d['dow'] = d.index.weekday
+    add_tod = pd.get_dummies(d['tod'], prefix='tod', drop_first=True)
+    d = d.join(add_tod)
+    add_dow = pd.get_dummies(d['dow'], prefix='dow', drop_first=True)
+    d = d.join(add_dow)
+    labels = np.array(d['district'])
+    features = d.reset_index().drop(['timestamp', 'district', 'tod', 'dow'], axis=1)
+    feature_list = list(features.columns)
+    features = np.array(features)
+    train_features, test_features, train_labels, test_labels = train_test_split(features,
+                                                                                labels,
+                                                                                test_size=0.25,
+                                                                                random_state=42)
+    rf = RandomForestRegressor(n_estimators=1000, random_state=42)
+
+
+
+
