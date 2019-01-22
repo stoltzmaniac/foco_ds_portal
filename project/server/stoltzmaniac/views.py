@@ -21,9 +21,9 @@ def home():
     return render_template("stoltzmaniac/home.html")
 
 
-@stoltzmaniac_blueprint.route("/drop_files", methods=["GET"])
-def drop_files():
-    return render_template("stoltzmaniac/drop_files.html")
+@stoltzmaniac_blueprint.route("/model_data", methods=["GET"])
+def model_data():
+    return render_template("stoltzmaniac/model_data.html")
 
 
 @stoltzmaniac_blueprint.route("/csv_example", methods=["GET"])
@@ -120,24 +120,25 @@ def generate_wc(screen_name, party):
 @stoltzmaniac_blueprint.route("/upload_and_read_csv", methods=["POST"])
 @login_required
 def upload_and_read_csv():
-    for key, f in request.files.items():
-        try:
-            print(f)
-            new_f = io.StringIO(f.stream.read().decode("UTF8"))
-            csv_input = csv.reader(new_f)
-            d = [i for i in csv_input]
-            print(d)
-            data = pd.DataFrame(d)
-            data = data.to_dict(orient='records')
-        except Exception as e:
-            print(e)
-            data = {'status': 'error'}
-        print(data)
+    try:
+        for key, f in request.files.items():
+            try:
+                new_f = io.StringIO(f.stream.read().decode("UTF8"))
+                csv_input = csv.reader(new_f)
+                d = [i for i in csv_input]
+                data = pd.DataFrame(d)
+                headers = data.iloc[0]
+                data = data[1:].rename(columns = headers)
+                data = data.to_dict(orient='records')
+            except Exception as e:
+                data = {'status': 'error'}
 
-        # Upload to S3
-        s3 = S3()
-        if key.startswith('file'):
-            upload, filename = s3.upload_file_by_object(f)
-            print(filename)
-
-    return jsonify(data)
+            # Upload to S3
+            s3 = S3()
+            if key.startswith('file'):
+                upload, filename = s3.upload_file_by_object(f)
+        if data:
+            return jsonify({'yes':'sir'})
+    except Exception as e:
+        data = {'status': 'error'}
+        return jsonify(data), 400

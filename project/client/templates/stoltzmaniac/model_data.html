@@ -3,7 +3,7 @@
 
 {% block css %}
     {{ dropzone.load_css() }}
-    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 200px;') }}
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
     <div class="container">
         <h1 class="mt-5">Stoltzmaniac - Drag and Drop files example</h1>
         <strong>Drop your files below</strong>
-            <div>
+            <div id="dropzone_uploads">
                 {{ dropzone.create(action=url_for('stoltzmaniac.upload_and_read_csv')) }}
             </div>
     </div>
