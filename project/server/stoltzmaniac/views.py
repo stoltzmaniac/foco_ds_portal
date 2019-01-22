@@ -1,4 +1,7 @@
 # project/server/stoltzmaniac/views.py
+import io
+import csv
+
 from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify
 from flask_login import login_required
 import pandas as pd
@@ -110,3 +113,31 @@ def generate_wc(screen_name, party):
     wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
+
+
+# TODO: Add CSRF protection
+# TODO: Add Error handling and remove upload followed by download (just read csv and upload, no download)
+@stoltzmaniac_blueprint.route("/upload_and_read_csv", methods=["POST"])
+@login_required
+def upload_and_read_csv():
+    for key, f in request.files.items():
+        try:
+            print(f)
+            new_f = io.StringIO(f.stream.read().decode("UTF8"))
+            csv_input = csv.reader(new_f)
+            d = [i for i in csv_input]
+            print(d)
+            data = pd.DataFrame(d)
+            data = data.to_dict(orient='records')
+        except Exception as e:
+            print(e)
+            data = {'status': 'error'}
+        print(data)
+
+        # Upload to S3
+        s3 = S3()
+        if key.startswith('file'):
+            upload, filename = s3.upload_file_by_object(f)
+            print(filename)
+
+    return jsonify(data)
