@@ -1,10 +1,13 @@
 # project/server/stoltzmaniac/views.py
-from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify
+from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify, session
 from flask_login import login_required
 import pandas as pd
+from urllib.parse import unquote
+import statsmodels.api as sm
 
 from project.server.utils import S3
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
+from project.server.stoltzmaniac.forms import FileUploadForm
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
 from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, lookup_recent_tweets, store_daily_public_tweets
 from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
@@ -110,3 +113,44 @@ def generate_wc(screen_name, party):
     wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
     return wordcloud.decode('utf-8')
+
+
+@stoltzmaniac_blueprint.route("/data_model", methods=["GET", "POST"])
+def data_model():
+    form = FileUploadForm()
+    user_id = str(session["user_id"])
+
+    if request.method == "GET":
+        return render_template("stoltzmaniac/data_model.html",
+                               myform=form, data_columns=[], filename='')
+
+    elif request.method == "POST" and form.validate_on_submit():
+        form_data = form.data
+        filename = ''
+        for key, f in form_data.items():
+            s3 = S3()
+            if key.startswith('file'):
+                upload, filename = s3.upload_file_by_object(f)
+        data = pd.read_csv(filename)
+        columns = data.columns.tolist()
+        df_head = data.head(10)
+        return render_template("stoltzmaniac/data_model.html",
+                               myform=form, data_columns=columns,
+                               filename=filename, df_head=df_head.to_html())
+    else:
+        return jsonify({"something": "went wrong"})
+
+
+
+@stoltzmaniac_blueprint.route("/regression/<dependent_variable>", methods=["POST"])
+def regression(dependent_variable):
+    file_location = request.get_data().decode("utf-8")
+    file_location = file_location.split("file_location=")
+    file_location = unquote(file_location[1])
+    data = pd.read_csv(file_location)
+    X = data.drop(columns=[dependent_variable])
+    y = data[[dependent_variable]]
+    model = sm.OLS(y, X).fit()
+    return jsonify({'fittedvalues': model.fittedvalues.to_dict(),
+                    'pvalues': model.pvalues.to_dict(),
+                    'r-squared': model.rsquared})

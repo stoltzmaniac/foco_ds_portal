@@ -35,3 +35,5 @@ Pillow
 wordcloud
 ipython
 boto3
+statsmodels
+sklearn

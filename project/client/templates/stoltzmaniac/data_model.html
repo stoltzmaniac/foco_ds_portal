@@ -1,0 +1,93 @@
+
+{% extends "_base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="mt-5">Stoltzmaniac - Data Model</h1>
+        <form id="randomDataForm" class="form" method="POST" action="" role="form", enctype="multipart/form-data">
+        {{ myform.csrf_token }}
+        <div class="form-group">
+            <strong>{{ myform.file.label }}</strong>
+            {{ myform.file(placeholder="Upload File", class_="form-control")}}
+        </div>
+        <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+    </form>
+    <hr>
+    <div class="container">
+        {% if df_head %}
+            {{ df_head | safe}}
+        {% endif %}
+    </div>
+    <div class="container">
+        {% if data_columns %}
+            <h4>Choose Dependent Variable</h4>
+            <ul>
+                {% for dc in data_columns %}
+                    <li><button id={{ dc }}><div class="dep_var">{{ dc }}</div></button></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+{#    <div class="container">#}
+{#        {% if data_columns %}#}
+{#            <h4>Choose Dependent Variable</h4>#}
+{#                <table style="width:100%">#}
+{#                  <tr>#}
+{#                    <th>Variable</th>#}
+{#                    <th>Independent</th>#}
+{#                    <th>Dependent</th>#}
+{#                    <th>Exclude</th>#}
+{#                  </tr>#}
+{#                {% for dc in data_columns %}#}
+{#                  <tr>#}
+{#                    <td id="{{ dc }}">{{ dc }}</td>#}
+{#                    <td><button><i class="fa fa-check" aria-hidden="true"></i></button></td>#}
+{#                    <td><button><i class="fa fa-times" aria-hidden="true"></i></button></td>#}
+{#                    <td><button><i class="fa fa-times" aria-hidden="true"></i></button></td>#}
+{#                {% endfor %}#}
+{#                </table>#}
+{#        {% endif %}#}
+{#    </div>#}
+
+    <hr>
+
+    <div class="container">
+        <h4>Dependent variable selected:  </h4>
+        <div class="container" id="dependent_variable"></div>
+    </div>
+
+    <hr>
+
+    Model Results
+    <div id="regression_results"></div>
+
+    </div>
+
+
+
+    <script type=text/javascript>
+        $(document).ready(function () {
+            var file_location = "{{ filename | safe}}";
+            var dependent_variable = "";
+
+            $(".dep_var").click(function () {
+                dependent_variable = $(this).text();
+                $("#dependent_variable").html(dependent_variable);
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "./regression/" + dependent_variable,
+                    data: {'file_location': file_location },
+                    success: function(result){
+                        console.log(result);
+                        $("#regression_results").html(
+                            JSON.stringify(result));
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
