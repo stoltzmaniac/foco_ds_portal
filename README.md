@@ -16,7 +16,7 @@ $ git clone https://github.com/stoltzmaniac/foco_ds_portal.git
 Update the environment variables in *docker-compose.yml* by:
   - Rename `.env.example` to `.env`
   - Fill in the variables (a few are prepopulated for debug mode)
-  - Fill in the `TWTR` variables with your own data
+  - Copy the project/nginx/default.conf.example (remove .example) replace your server/domain
   - This will be ignored via `.gitignore`
 
 Build images and spin up containers!
@@ -88,7 +88,7 @@ The Nginx container has a [Let's Encrypt](https://letsencrypt.org/) client insta
 3. Open a shell in the running Nginx container.
   - `docker-compose exec web-nginx sh`
 4. Once at the Nginx containers shell prompt, run the `certbot` client.
-  - `certbot certbot --authenticator webroot --installer nginx --webroot-path /var/letsencrypt --staging`
+  - `certbot --authenticator webroot --installer nginx --webroot-path /var/letsencrypt --staging`
   - You will be prompted for information and decisions. Specifically:
     - The domain name you are obtaining a certificate for. This can be provided on the command line with the `--domain` option.
     - An email address to receive information from Let's Encrypt like certificate expiration notices. This can be provided on the command line with the `--email` option.
