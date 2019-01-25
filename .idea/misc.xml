@@ -75,5 +75,5 @@
   <component name="PreferredVcsStorage">
     <preferredVcsName>ApexVCS</preferredVcsName>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.6.5 Docker Compose (web at [/Users/stoltzmanconsulting/Documents/Git-Repositories/GitHub/foco_ds_portal/docker-compose.yml])" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.6.5 Docker Compose (web at [/Users/stoltzmanconsulting/Documents/Git-Repositories/GitLab/flannelytics_solutions/docker-compose.yml])" project-jdk-type="Python SDK" />
 </project>

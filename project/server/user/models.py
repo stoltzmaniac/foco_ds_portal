@@ -10,7 +10,6 @@ class User(UserMixin, SurrogatePK, Model):
     """A user of the app."""
 
     __tablename__ = 'users'
-    username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
     #: The hashed password
     password = Column(db.LargeBinary(128), nullable=True)
@@ -20,9 +19,9 @@ class User(UserMixin, SurrogatePK, Model):
     active = Column(db.Boolean(), default=False)
     is_admin = Column(db.Boolean(), default=False)
 
-    def __init__(self, username, email, password=None, **kwargs):
+    def __init__(self, email, password=None, **kwargs):
         """Create instance."""
-        db.Model.__init__(self, username=username, email=email, **kwargs)
+        db.Model.__init__(self, email=email, **kwargs)
         if password:
             self.set_password(password)
         else:
@@ -43,14 +42,15 @@ class User(UserMixin, SurrogatePK, Model):
 
     def __repr__(self):
         """Represent instance as a unique string."""
-        return '<User({username!r})>'.format(username=self.username)
+        return '<User({email!r})>'.format(email=self.email)
 
 
 class Role(SurrogatePK, Model):
     """A role for a user."""
 
     __tablename__ = 'roles'
-    name = Column(db.String(80), unique=True, nullable=False)
+    name = Column(db.String(80), nullable=False)
+    company = Column(db.String(100), nullable=False)
     user_id = reference_col('users', nullable=True)
     user = relationship('User', backref='roles')
 
