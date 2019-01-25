@@ -58,10 +58,10 @@ def analyze_tweet_sentiment(tweet_list: list) -> list:
 
 
 def clean_list_of_text(wordcloud_data):
-    raw_string = ''.join(wordcloud_data)
-    no_links = re.sub(r'http\S+', '', raw_string)
-    no_unicode = re.sub(r"\\[a-z][a-z]?[0-9]+", '', no_links)
-    no_special_characters = re.sub('[^A-Za-z ]+', '', no_unicode)
+    raw_string = "".join(wordcloud_data)
+    no_links = re.sub(r"http\S+", "", raw_string)
+    no_unicode = re.sub(r"\\[a-z][a-z]?[0-9]+", "", no_links)
+    no_special_characters = re.sub("[^A-Za-z ]+", "", no_unicode)
     words = no_special_characters.split(" ")
     words = [w for w in words if len(w) > 2]  # ignore a, an, be, ...
     words = [w.lower() for w in words]
@@ -75,14 +75,13 @@ def generate_wordcloud(wordcloud_data, image_url) -> plt:
     img = Image.open(BytesIO(img_response.content))
     mask = np.array(img)
     wc = WordCloud(background_color="white", max_words=2000, mask=mask)
-    clean_string = ','.join(words)
+    clean_string = ",".join(words)
     wc.generate(clean_string)
     f = plt.figure(figsize=(15, 15))
     f.add_subplot(1, 2, 1)
-    plt.imshow(wc, interpolation='bilinear')
+    plt.imshow(wc, interpolation="bilinear")
     plt.axis("off")
     tmpfile = BytesIO()
-    plt.savefig(tmpfile, format='png', bbox_inches="tight", pad_inches=0)
+    plt.savefig(tmpfile, format="png", bbox_inches="tight", pad_inches=0)
     encoded = base64.b64encode(tmpfile.getvalue())
     return encoded
-

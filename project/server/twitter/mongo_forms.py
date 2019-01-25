@@ -4,4 +4,3 @@ from project.server.twitter.mongo_models import TwitterRequest, TwitterTimelineR
 
 TwitterForm = model_form(TwitterRequest)
 TwitterTimelineForm = model_form(TwitterTimelineRequest)
-

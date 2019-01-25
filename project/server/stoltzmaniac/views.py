@@ -1,5 +1,14 @@
 # project/server/stoltzmaniac/views.py
-from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify, session
+from flask import (
+    render_template,
+    Blueprint,
+    url_for,
+    redirect,
+    flash,
+    request,
+    jsonify,
+    session,
+)
 from flask_login import login_required
 import pandas as pd
 from urllib.parse import unquote
@@ -9,8 +18,17 @@ from project.server.utils import S3
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.stoltzmaniac.forms import FileUploadForm
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
-from project.server.twitter.utils import twitter_search, twitter_timeline, twitter_congressional_list, lookup_recent_tweets, store_daily_public_tweets
-from project.server.stoltzmaniac.utils import analyze_tweet_sentiment, generate_wordcloud
+from project.server.twitter.utils import (
+    twitter_search,
+    twitter_timeline,
+    twitter_congressional_list,
+    lookup_recent_tweets,
+    store_daily_public_tweets,
+)
+from project.server.stoltzmaniac.utils import (
+    analyze_tweet_sentiment,
+    generate_wordcloud,
+)
 
 
 stoltzmaniac_blueprint = Blueprint("stoltzmaniac", __name__, url_prefix="/stoltzmaniac")
@@ -47,7 +65,9 @@ def twitter_sentiment():
 
     elif request.method == "POST" and form.validate_on_submit():
         form_data = form.data
-        data = twitter_search(search_term=form_data['search_term'], count=form_data['count'])
+        data = twitter_search(
+            search_term=form_data["search_term"], count=form_data["count"]
+        )
         sentiment = analyze_tweet_sentiment(data)
         return render_template(
             "stoltzmaniac/twitter_sentiment.html",
@@ -66,29 +86,44 @@ def tweet_timeline():
 
     elif request.method == "POST" and form.validate_on_submit():
         form_data = form.data
-        wordcloud_data = twitter_timeline(form_data['username'])
-        wordcloud = generate_wordcloud(wordcloud_data, form_data['image_url'])
+        wordcloud_data = twitter_timeline(form_data["username"])
+        wordcloud = generate_wordcloud(wordcloud_data, form_data["image_url"])
         return render_template(
             "stoltzmaniac/twitter_timeline.html",
             myform=form,
-            wordcloud=wordcloud.decode('utf-8'),
+            wordcloud=wordcloud.decode("utf-8"),
         )
 
 
-@stoltzmaniac_blueprint.route('/congress', methods=['GET'])
+@stoltzmaniac_blueprint.route("/congress", methods=["GET"])
 @login_required
 def congressional_tweets():
-    foco_ds_purpose = 'congressional_tweets'
+    foco_ds_purpose = "congressional_tweets"
     data = lookup_recent_tweets(foco_ds_purpose)
     if not data:
         data = twitter_congressional_list()
         w_data = store_daily_public_tweets(data, foco_ds_purpose)
     df = pd.DataFrame(data)
-    s_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'senate')].to_dict(orient='records')
-    s_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'senate')].to_dict(orient='records')
-    h_rep = df[(df['party'] == 'republican') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
-    h_dem = df[(df['party'] == 'democrat') & (df['chamber'] == 'house_of_representatives')].to_dict(orient='records')
-    return render_template('stoltzmaniac/congress.html', s_rep=s_rep, s_dem=s_dem, h_dem=h_dem, h_rep=h_rep, wordcloud='')
+    s_rep = df[(df["party"] == "republican") & (df["chamber"] == "senate")].to_dict(
+        orient="records"
+    )
+    s_dem = df[(df["party"] == "democrat") & (df["chamber"] == "senate")].to_dict(
+        orient="records"
+    )
+    h_rep = df[
+        (df["party"] == "republican") & (df["chamber"] == "house_of_representatives")
+    ].to_dict(orient="records")
+    h_dem = df[
+        (df["party"] == "democrat") & (df["chamber"] == "house_of_representatives")
+    ].to_dict(orient="records")
+    return render_template(
+        "stoltzmaniac/congress.html",
+        s_rep=s_rep,
+        s_dem=s_dem,
+        h_dem=h_dem,
+        h_rep=h_rep,
+        wordcloud="",
+    )
 
 
 # TODO: Add CSRF protection
@@ -97,22 +132,22 @@ def congressional_tweets():
 def upload_s3():
     for key, f in request.files.items():
         s3 = S3()
-        if key.startswith('file'):
+        if key.startswith("file"):
             upload, filename = s3.upload_file_by_object(f)
     print(filename)
-    return jsonify({'file_location': filename})
+    return jsonify({"file_location": filename})
 
 
 # TODO: Add CSRF protection
 @stoltzmaniac_blueprint.route("/generate_cloud/<screen_name>/<party>", methods=["POST"])
 @login_required
 def generate_wc(screen_name, party):
-    img_url = 'https://i.postimg.cc/VkPvgL8K/ele.png'
-    if party == 'democrat':
-        img_url = 'https://i.postimg.cc/GmvWPbLJ/donk.jpg'
+    img_url = "https://i.postimg.cc/VkPvgL8K/ele.png"
+    if party == "democrat":
+        img_url = "https://i.postimg.cc/GmvWPbLJ/donk.jpg"
     wordcloud_data = twitter_timeline(screen_name)
     wordcloud = generate_wordcloud(wordcloud_data, img_url)
-    return wordcloud.decode('utf-8')
+    return wordcloud.decode("utf-8")
 
 
 @stoltzmaniac_blueprint.route("/data_model", methods=["GET", "POST"])
@@ -121,25 +156,29 @@ def data_model():
     user_id = str(session["user_id"])
 
     if request.method == "GET":
-        return render_template("stoltzmaniac/data_model.html",
-                               myform=form, data_columns=[], filename='')
+        return render_template(
+            "stoltzmaniac/data_model.html", myform=form, data_columns=[], filename=""
+        )
 
     elif request.method == "POST" and form.validate_on_submit():
         form_data = form.data
-        filename = ''
+        filename = ""
         for key, f in form_data.items():
             s3 = S3()
-            if key.startswith('file'):
+            if key.startswith("file"):
                 upload, filename = s3.upload_file_by_object(f)
         data = pd.read_csv(filename)
         columns = data.columns.tolist()
         df_head = data.head(10)
-        return render_template("stoltzmaniac/data_model.html",
-                               myform=form, data_columns=columns,
-                               filename=filename, df_head=df_head.to_html())
+        return render_template(
+            "stoltzmaniac/data_model.html",
+            myform=form,
+            data_columns=columns,
+            filename=filename,
+            df_head=df_head.to_html(),
+        )
     else:
         return jsonify({"something": "went wrong"})
-
 
 
 @stoltzmaniac_blueprint.route("/regression/<dependent_variable>", methods=["POST"])
@@ -151,6 +190,10 @@ def regression(dependent_variable):
     X = data.drop(columns=[dependent_variable])
     y = data[[dependent_variable]]
     model = sm.OLS(y, X).fit()
-    return jsonify({'fittedvalues': model.fittedvalues.to_dict(),
-                    'pvalues': model.pvalues.to_dict(),
-                    'r-squared': model.rsquared})
+    return jsonify(
+        {
+            "fittedvalues": model.fittedvalues.to_dict(),
+            "pvalues": model.pvalues.to_dict(),
+            "r-squared": model.rsquared,
+        }
+    )
