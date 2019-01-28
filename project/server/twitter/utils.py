@@ -63,9 +63,9 @@ def twitter_timeline(screen_name: str) -> list:
 
 def twitter_congressional_list() -> list:
     chamber_data = [{'chamber': 'house_of_representatives', 'party': 'republican', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
-                    {'chamber': 'house_of_representatives', 'party': 'democrat', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
-                    {'chamber': 'senate', 'party': 'republican', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'},
-                    {'chamber': 'senate', 'party': 'democrat', 'slug': 'house-republicans', 'owner_screen_name': 'HouseGOP'}]
+                    {'chamber': 'house_of_representatives', 'party': 'democrat', 'slug': 'house-democrats', 'owner_screen_name': 'HouseDemocrats'},
+                    {'chamber': 'senate', 'party': 'republican', 'slug': 'senaterepublicans', 'owner_screen_name': 'SenateGOP'},
+                    {'chamber': 'senate', 'party': 'democrat', 'slug': 'senatedemocrats', 'owner_screen_name': 'SenateDems'}]
     congress = []
     for i in chamber_data:
         tweets = TwitterData()
