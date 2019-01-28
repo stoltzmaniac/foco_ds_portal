@@ -66,4 +66,5 @@ services:
     volumes:
       - $NGINXCONF:/etc/nginx/conf.d
       - $SSLROOT:/etc/letsencrypt/live
+      - $SSLARCHIVE:/etc/letsencrypt/archive
   
