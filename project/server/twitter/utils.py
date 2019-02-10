@@ -13,36 +13,36 @@ class TwitterData:
 
     def __init__(self):
         self.count = 100
-        self.request_results = []
         self.unpacked_results = []
 
-    def timeline_request(self, screen_name, **kwargs):
-        self.request_results = twtr.GetUserTimeline(screen_name=screen_name, count=self.count)
-        data = self.unpack_data(**kwargs)
+    def timeline_request(self, screen_name):
+        request_results = twtr.GetUserTimeline(screen_name=screen_name, count=self.count)
+        data = self.unpack_data(request_results)
         return data
 
-    def search_request(self, search_term, **kwargs):
+    def search_request(self, search_term):
         search_query = (f"q={quote_plus(search_term)}&count={str(self.count)}")
-        self.request_results = twtr.GetSearch(raw_query=search_query)
-        data = self.unpack_data(**kwargs)
+        data = twtr.GetSearch(raw_query=search_query)
+        data = self.unpack_data(data)
         return data
 
-    def list_members_request(self, slug, owner_screen_name, **kwargs):
-        self.request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
-        data = self.unpack_data(**kwargs)
+    def list_members_request(self, slug, owner_screen_name):
+        request_results = twtr.GetListMembers(slug=slug, owner_screen_name=owner_screen_name)
+        data = self.unpack_data(request_results)
         return data
 
-    def unpack_data(self, **kwargs):
+    @staticmethod
+    def unpack_data(data_request):
         data = []
-        for r in self.request_results:
+        for r in data_request:
             d = r.AsDict()
             d["timestamp"] = time.strftime(
                 "%Y-%m-%d %H:%M:%S",
                 time.strptime(d["created_at"], "%a %b %d %H:%M:%S +0000 %Y"),
             )
             data.append(d)
-        self.unpacked_results = [dict(i, **kwargs) for i in data]
-        return self.unpacked_results
+        unpacked_results = [dict(i) for i in data]
+        return unpacked_results
 
 
 
@@ -69,7 +69,10 @@ def twitter_congressional_list() -> list:
     congress = []
     for i in chamber_data:
         tweets = TwitterData()
-        tmp = tweets.list_members_request(slug=i['slug'], owner_screen_name=i['owner_screen_name'], chamber=i['chamber'], party=i['party'])
+        tmp = tweets.list_members_request(slug=i['slug'], owner_screen_name=i['owner_screen_name'])
+        for j in tmp:
+            j['chamber'] = i['chamber']
+            j['party'] = i['party']
         congress = congress + tmp
     return congress
 

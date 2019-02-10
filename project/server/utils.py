@@ -41,15 +41,14 @@ twtr = twitter.Api(
 
 
 class S3:
-
-    def __init__(self):
-        self.s3_session = boto3.Session(
-            aws_access_key_id=BaseConfig.S3_KEY,
-            aws_secret_access_key=BaseConfig.S3_SECRET
-        )
-        self.bucket_name = 'foco-ds-portal-files'
-        self.s3_bucket = self.s3_session.resource('s3').Bucket(self.bucket_name)
-        self.s3_url_prefix = f"https://s3.amazonaws.com/{self.bucket_name}/"
+    
+    s3_session = boto3.Session(
+        aws_access_key_id=BaseConfig.S3_KEY,
+        aws_secret_access_key=BaseConfig.S3_SECRET
+    )
+    bucket_name = 'foco-ds-portal-files'
+    s3_bucket = s3_session.resource('s3').Bucket(bucket_name)
+    s3_url_prefix = f"https://s3.amazonaws.com/{bucket_name}/"
 
     def upload_file_by_name(self, file: str):
         with open(file, 'r') as f:
