@@ -153,6 +153,7 @@ def regression(dependent_variable):
     file_location = file_location.split("file_location=")
     file_location = unquote(file_location[1])
     data = pd.read_csv(file_location)
+    data = data.dropna()
     data = data.loc[:, data.dtypes == np.float64]
     df_final = data.copy()
     X = data.drop(columns=[dependent_variable])
@@ -165,9 +166,8 @@ def regression(dependent_variable):
     for i in X:
         bp = BasicPlot()
         p1 = bp.scatter(df_final, x_axis=i, y_axis=dependent_variable, color='black')
-        p2 = bp.line(df_final, x_axis=i, y_axis='fitted_values', color='blue')
+        p2 = bp.scatter(df_final, x_axis=i, y_axis='fitted_values', color='blue')
         plots.append(bp.plot_to_div([p1, p2]))
-    return jsonify({'fittedvalues': model.fittedvalues.to_dict(),
-                    'pvalues': model.pvalues.to_dict(),
+    return jsonify({'pvalues': model.pvalues.to_dict(),
                     'r-squared': model.rsquared,
                     'plots': plots})

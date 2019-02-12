@@ -58,9 +58,11 @@
         {% endif %}
     </div>
 
+    <pre>
     <div id="regression_results"></div>
 
     </div>
+    </pre>
 
 
 
@@ -83,7 +85,7 @@
                             result['plots']);
                         delete result['plots'];
                         $("#regression_results").html(
-                            JSON.stringify(result));
+                            JSON.stringify(result, null, '\t'));
                     }
                 });
             });
