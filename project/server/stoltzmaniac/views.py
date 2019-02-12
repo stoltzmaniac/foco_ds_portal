@@ -2,10 +2,14 @@
 from flask import render_template, Blueprint, url_for, redirect, flash, request, jsonify, session
 from flask_login import login_required
 import pandas as pd
+import numpy as np
 from urllib.parse import unquote
 import statsmodels.api as sm
+import plotly.graph_objs as go
+import plotly.plotly as py
 
 from project.server.utils import S3
+from project.server.utilities.plotting import BasicPlot
 from project.server.stoltzmaniac.utils import download_csv, plot_altair
 from project.server.stoltzmaniac.forms import FileUploadForm
 from project.server.twitter.mongo_forms import TwitterForm, TwitterTimelineForm
@@ -118,7 +122,6 @@ def generate_wc(screen_name, party):
 @stoltzmaniac_blueprint.route("/data_model", methods=["GET", "POST"])
 def data_model():
     form = FileUploadForm()
-    user_id = str(session["user_id"])
 
     if request.method == "GET":
         return render_template("stoltzmaniac/data_model.html",
@@ -132,8 +135,10 @@ def data_model():
             if key.startswith('file'):
                 upload, filename = s3.upload_file_by_object(f)
         data = pd.read_csv(filename)
+        data = data.loc[:, data.dtypes == np.float64]
         columns = data.columns.tolist()
         df_head = data.head(10)
+
         return render_template("stoltzmaniac/data_model.html",
                                myform=form, data_columns=columns,
                                filename=filename, df_head=df_head.to_html())
@@ -148,9 +153,21 @@ def regression(dependent_variable):
     file_location = file_location.split("file_location=")
     file_location = unquote(file_location[1])
     data = pd.read_csv(file_location)
+    data = data.loc[:, data.dtypes == np.float64]
+    df_final = data.copy()
     X = data.drop(columns=[dependent_variable])
     y = data[[dependent_variable]]
     model = sm.OLS(y, X).fit()
+    fitted_y = model.fittedvalues
+    df_final['fitted_values'] = fitted_y
+    print(df_final.head())
+    plots = []
+    for i in X:
+        bp = BasicPlot()
+        p1 = bp.scatter(df_final, x_axis=i, y_axis=dependent_variable, color='black')
+        p2 = bp.line(df_final, x_axis=i, y_axis='fitted_values', color='blue')
+        plots.append(bp.plot_to_div([p1, p2]))
     return jsonify({'fittedvalues': model.fittedvalues.to_dict(),
                     'pvalues': model.pvalues.to_dict(),
-                    'r-squared': model.rsquared})
+                    'r-squared': model.rsquared,
+                    'plots': plots})

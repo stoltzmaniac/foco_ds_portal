@@ -19,48 +19,45 @@
             {{ df_head | safe}}
         {% endif %}
     </div>
-    <div class="container">
-        {% if data_columns %}
-            <h4>Choose Dependent Variable</h4>
-            <ul>
-                {% for dc in data_columns %}
-                    <li><button id={{ dc }}><div class="dep_var">{{ dc }}</div></button></li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-
-{#    <div class="container">#}
-{#        {% if data_columns %}#}
-{#            <h4>Choose Dependent Variable</h4>#}
-{#                <table style="width:100%">#}
-{#                  <tr>#}
-{#                    <th>Variable</th>#}
-{#                    <th>Independent</th>#}
-{#                    <th>Dependent</th>#}
-{#                    <th>Exclude</th>#}
-{#                  </tr>#}
-{#                {% for dc in data_columns %}#}
-{#                  <tr>#}
-{#                    <td id="{{ dc }}">{{ dc }}</td>#}
-{#                    <td><button><i class="fa fa-check" aria-hidden="true"></i></button></td>#}
-{#                    <td><button><i class="fa fa-times" aria-hidden="true"></i></button></td>#}
-{#                    <td><button><i class="fa fa-times" aria-hidden="true"></i></button></td>#}
-{#                {% endfor %}#}
-{#                </table>#}
-{#        {% endif %}#}
-{#    </div>#}
 
     <hr>
 
     <div class="container">
-        <h4>Dependent variable selected:  </h4>
-        <div class="container" id="dependent_variable"></div>
+        {% if data_columns %}
+            <h4>Choose Dependent Variable</h4>
+
+            <table class="table">
+              <thead>
+                <tr>
+                    <th scope="col">Independent Variable</th>
+                    <th scope="col"> < -- ></th>
+                    <th scope="col">Dependent Variable</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for dc in data_columns %}
+                <tr>
+                    <td><button class="button" id={{ dc }}><div class="dep_var">{{ dc }}</div></button></td>
+                    <td></td>
+                    <td class="dependent_variable" id="{{ dc }}"></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+        {% endif %}
     </div>
 
     <hr>
 
     Model Results
+
+    <div id="regression_plots"></div>
+        {% if results2 %}
+            {{ results2 | safe }}
+        {% endif %}
+    </div>
+
     <div id="regression_results"></div>
 
     </div>
@@ -74,7 +71,7 @@
 
             $(".dep_var").click(function () {
                 dependent_variable = $(this).text();
-                $("#dependent_variable").html(dependent_variable);
+                $(".dependent_variable").html(dependent_variable);
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -82,6 +79,9 @@
                     data: {'file_location': file_location },
                     success: function(result){
                         console.log(result);
+                        $("#regression_plots").html(
+                            result['plots']);
+                        delete result['plots'];
                         $("#regression_results").html(
                             JSON.stringify(result));
                     }
