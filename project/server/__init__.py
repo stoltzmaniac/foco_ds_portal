@@ -55,16 +55,16 @@ def create_app(script_info=None):
     from project.server.user.views import user_blueprint
     from project.server.main.views import main_blueprint
     from project.server.stoltzmaniac.views import stoltzmaniac_blueprint
+    from project.server.GregHilston.views import GregHilston_blueprint
     from project.server.twitter.views import twitter_blueprint
     from project.server.finance.views import finance_blueprint
-    from project.server.new_user_addition_example.views import new_user_addition_example_blueprint
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(stoltzmaniac_blueprint)
+    app.register_blueprint(GregHilston_blueprint)
     app.register_blueprint(twitter_blueprint)
     app.register_blueprint(finance_blueprint)
-    app.register_blueprint(new_user_addition_example_blueprint)
 
     # flask login
     from project.server.user.models import User
