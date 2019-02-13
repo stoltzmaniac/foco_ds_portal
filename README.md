@@ -25,7 +25,7 @@ Build images and spin up containers!
 $ sh initial_deploy.sh
 ```
 
-Access the application at the address [http://localhost](http://localhost)
+Access the application at the address [http://localhost:5002](http://localhost:5002)
 
 ### Testing
 
