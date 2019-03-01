@@ -26,6 +26,7 @@ class BaseConfig(object):
     S3_BUCKET = os.getenv("S3_BUCKET")
     S3_KEY = os.getenv("S3_KEY")
     S3_SECRET = os.getenv("S3_SECRET")
+    WEB_DOMAIN = os.getenv("WEB_DOMAIN")
     DROPZONE_ALLOWED_FILE_TYPE = "image"
     DROPZONE_MAX_FILE_SIZE = 3
     DROPZONE_MAX_FILES = 5

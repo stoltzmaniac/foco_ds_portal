@@ -7,6 +7,7 @@ from flask_login import login_user, logout_user, login_required
 from project.server import bcrypt, db
 from project.server.user.models import User
 from project.server.user.forms import LoginForm, RegisterForm
+from project.server.config import BaseConfig
 
 
 user_blueprint = Blueprint("user", __name__)
@@ -62,4 +63,5 @@ def members():
     with open('./jupyter_tokens/nbserver-1.json') as json_file:
         data = json.load(json_file)
         jupyter_token = data['token']
-    return render_template("user/members.html", jupyter_token=jupyter_token)
+        jupyter_domain = f"{BaseConfig.WEB_DOMAIN}:8888/?token={jupyter_token}"
+    return render_template("user/members.html", jupyter_domain=jupyter_domain)
