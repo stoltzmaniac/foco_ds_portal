@@ -8,7 +8,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - '.:/usr/src/app'
+      - ".:/usr/src/app"
     ports:
       - 5002:5000
     environment:
@@ -44,6 +44,8 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - "./backup_data/postgresql:/var/lib/postgresql/data"
 
   web-mongo:
     container_name: web-mongo
@@ -64,7 +66,18 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - $NGINXCONF:/etc/nginx/conf.d
-      - $SSLROOT:/etc/letsencrypt/live
-      - $SSLARCHIVE:/etc/letsencrypt/archive
-  
+      - "./project/nginx/conf.d:/etc/nginx/conf.d"
+      - "./ssl/live:/etc/letsencrypt/live"
+      - "./ssl/archive:/etc/letsencrypt/archive"
+
+  web-jupyter:
+    container_name: web-jupyter
+    build:
+      context: ./project/jupyter_lab
+      dockerfile: Dockerfile
+    depends_on:
+      - web
+    ports:
+      - 8888:8888
+    volumes:
+      - "./backup_data/jupyter:/opt/app/data"
