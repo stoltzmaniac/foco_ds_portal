@@ -2,6 +2,7 @@
 
 
 import os
+import json
 
 from flask import Flask, render_template
 from flask_login import LoginManager
@@ -92,6 +93,15 @@ def create_app(script_info=None):
     @app.errorhandler(500)
     def server_error_page(error):
         return render_template("errors/500.html"), 500
+
+    from project.server.config import BaseConfig
+    @app.context_processor
+    def inject_dict_to_all_templates():
+        with open('./jupyter_tokens/nbserver-1.json') as json_file:
+            file_data = json.load(json_file)
+            jupyter_domain = f"{BaseConfig.WEB_DOMAIN}:8888/?token={file_data['token']}"
+        jupyter_domain = jupyter_domain
+        return dict(jupyter_domain=jupyter_domain)
 
     # shell context for flask cli
     @app.shell_context_processor
