@@ -33,6 +33,7 @@ services:
       - S3_SECRET=${S3_SECRET}
     depends_on:
       - web-db
+      - web-jupyter
 
   web-db:
     container_name: web-db
@@ -75,9 +76,10 @@ services:
     build:
       context: ./project/jupyter_lab
       dockerfile: Dockerfile
-    depends_on:
-      - web
     ports:
       - 8888:8888
+    command: >
+      sh -c "jupyter lab --ip=0.0.0.0 --allow-root"
     volumes:
       - "./backup_data/jupyter:/opt/app/data"
+      - "./jupyter_tokens:/root/.local/share/jupyter/runtime/"

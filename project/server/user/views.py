@@ -1,7 +1,7 @@
 # project/server/user/views.py
+import json
 
-
-from flask import render_template, Blueprint, url_for, redirect, flash, request
+from flask import render_template, Blueprint, url_for, redirect, flash, request, g
 from flask_login import login_user, logout_user, login_required
 
 from project.server import bcrypt, db
@@ -59,4 +59,7 @@ def logout():
 @user_blueprint.route("/members")
 @login_required
 def members():
-    return render_template("user/members.html")
+    with open('./jupyter_tokens/nbserver-1.json') as json_file:
+        data = json.load(json_file)
+        jupyter_token = data['token']
+    return render_template("user/members.html", jupyter_token=jupyter_token)
