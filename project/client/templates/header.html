@@ -23,7 +23,10 @@
 
         {% if current_user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ jupyter_domain }}">FoCo DS JupyterLab</a>
+          <a class="nav-link" href="{{ jupyterlab_domain }}">FoCo DS JupyterLab</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ jupyterhub_domain }}">FoCo DS JupyterHub</a>
         </li>
 
             <li class="nav-item">
