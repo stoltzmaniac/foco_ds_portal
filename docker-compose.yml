@@ -34,7 +34,7 @@ services:
       - WEB_DOMAIN=${WEB_DOMAIN}
     depends_on:
       - web-db
-      - web-jupyter
+      - web-jupyterhub
 
   web-db:
     container_name: web-db
@@ -72,15 +72,26 @@ services:
       - "./ssl/live:/etc/letsencrypt/live"
       - "./ssl/archive:/etc/letsencrypt/archive"
 
-  web-jupyter:
-    container_name: web-jupyter
+  web-jupyterhub:
+    container_name: web-jupyterhub
     build:
-      context: ./project/jupyter_lab
+      context: ./project/jupyterhub
       dockerfile: Dockerfile
+    environment:
+      - JUPYTERHUB_ADMIN=${JUPYTERHUB_ADMIN}
+      - JUPYTERHUB_PASSWORD=${JUPYTERHUB_PASSWORD}
+      - JUPYTERHUB_DUMMY_PASSWORD=${JUPYTERHUB_DUMMY_PASSWORD}
+      - OAUTH_CALLBACK_URL=${OAUTH_CALLBACK_URL}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - GITHUB_HTTP=TRUE
     ports:
-      - 8888:8888
+      - 8000:8000
     command: >
-      sh -c "jupyter lab --ip=0.0.0.0 --allow-root"
+      bash -c "pip install oauthenticator &&
+               jupyterhub -f /etc/jupyterhub/jupyterhub_config.py"
     volumes:
-      - "./backup_data/jupyter:/opt/app/data"
-      - "./jupyter_tokens:/root/.local/share/jupyter/runtime/"
+      - "./backup_data/web-jupyterhub/srv/jupyterhub:/srv/jupyterhub"
+      - "./backup_data/web-jupyterhub/etc/jupyterhub:/etc/jupyterhub"
+      - "./backup_data/web-jupyterhub/var/log:/var/log"
+      - "./project/jupyterhub/config/jupyterhub_config.py:/etc/jupyterhub/jupyterhub_config.py"
