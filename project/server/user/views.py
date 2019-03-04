@@ -60,8 +60,4 @@ def logout():
 @user_blueprint.route("/members")
 @login_required
 def members():
-    with open('./jupyter_tokens/nbserver-1.json') as json_file:
-        data = json.load(json_file)
-        jupyter_token = data['token']
-        jupyter_domain = f"{BaseConfig.WEB_DOMAIN}:8888/?token={jupyter_token}"
-    return render_template("user/members.html", jupyter_domain=jupyter_domain)
+    return render_template("user/members.html")

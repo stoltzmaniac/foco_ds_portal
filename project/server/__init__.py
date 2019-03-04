@@ -99,9 +99,10 @@ def create_app(script_info=None):
     def inject_dict_to_all_templates():
         with open('./jupyter_tokens/nbserver-1.json') as json_file:
             file_data = json.load(json_file)
-            jupyter_domain = f"{BaseConfig.WEB_DOMAIN}:8888/?token={file_data['token']}"
-        jupyter_domain = jupyter_domain
-        return dict(jupyter_domain=jupyter_domain)
+            jupyterlab_domain = f"{BaseConfig.WEB_DOMAIN}:8888/?token={file_data['token']}"
+        jupyterlab_domain = jupyterlab_domain
+        jupyterhub_domain = f"{BaseConfig.WEB_DOMAIN}:8000/"
+        return dict(jupyterlab_domain=jupyterlab_domain, jupyterhub_domain=jupyterhub_domain)
 
     # shell context for flask cli
     @app.shell_context_processor
